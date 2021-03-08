@@ -192,12 +192,12 @@ public:
 	double length2() const
 		{ return n[0]*n[0] + n[1]*n[1] + n[2]*n[2]; }
 	double length() const
-		{ return sqrt( length2() ); }
+		{ return sqrt( length2() ) + 0.000000000000000000001; }
 
 	//---[ Normalization ]-----------------------
 
 	void normalize() { 
-		double len = length();
+		double len = length() + 0.000000000000000000001;
 		n[0] /= len; n[1] /= len; n[2] /= len;
 	}
 

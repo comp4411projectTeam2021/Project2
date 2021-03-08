@@ -41,6 +41,48 @@ void SampleModel::draw()
 	drawBox(10,0.01f,10);
 	glPopMatrix();
 
+	//Draw some test obj
+	glPushMatrix();
+	setDiffuseColor(0.3,0,0);
+	glTranslated(-5, 0, 0);
+	drawBox(1, 1, 1);
+	glPopMatrix();
+
+	
+	glPushMatrix();
+	setDiffuseColor(COLOR_RED);
+	glTranslated(5, 0, 0);
+	drawBox(1, 1, 1);
+	glPopMatrix();
+
+	glPushMatrix();
+	setDiffuseColor(0,0.3,  0);
+	glTranslated( 0,-5, 0);
+	drawBox(1, 1, 1);
+	glPopMatrix();
+
+
+	glPushMatrix();
+	setDiffuseColor(COLOR_GREEN);
+	glTranslated(0,5,  0);
+	drawBox(1, 1, 1);
+	glPopMatrix();
+
+	glPushMatrix();
+	setDiffuseColor(0, 0, 0.3);
+	glTranslated(0, 0, -5);
+	drawBox(1, 1, 1);
+	glPopMatrix();
+
+
+	glPushMatrix();
+	setDiffuseColor(COLOR_BLUE);
+	glTranslated(0, 0, 5);
+	drawBox(1, 1, 1);
+	glPopMatrix();
+
+	//test obj end
+
 	// draw the sample model
 	setAmbientColor(.1f,.1f,.1f);
 	setDiffuseColor(COLOR_GREEN);

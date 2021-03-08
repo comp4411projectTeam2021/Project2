@@ -144,7 +144,7 @@ void Camera::dragMouse( int x, int y )
 		}
 	case kActionRotate:
 		{
-			float dAzimuth		=   -mouseDelta[0] * kMouseRotationSensitivity;
+			float dAzimuth =   -mouseDelta[0] * kMouseRotationSensitivity;
 			float dElevation	=   mouseDelta[1] * kMouseRotationSensitivity;
 			
 			setAzimuth(getAzimuth() + dAzimuth);
@@ -178,9 +178,54 @@ void Camera::applyViewingTransform() {
 
 	// Place the camera at mPosition, aim the camera at
 	// mLookAt, and twist the camera such that mUpVector is up
-	gluLookAt(	mPosition[0], mPosition[1], mPosition[2],
+	/*gluLookAt(	mPosition[0], mPosition[1], mPosition[2],
 				mLookAt[0],   mLookAt[1],   mLookAt[2],
-				mUpVector[0], mUpVector[1], mUpVector[2]);
+				mUpVector[0], mUpVector[1], mUpVector[2]);*/
+
+	lookAt(mPosition, mLookAt, mUpVector);
+	/*printf("UP: %f %f %f \n", mUpVector[0], mUpVector[1], mUpVector[2]);
+	printf("AT: %f %f %f \n", mLookAt[0], mLookAt[1], mLookAt[2]);
+	printf("PO: %f %f %f \n\n", mPosition[0], mPosition[1], mPosition[2]);*/
+}
+
+void Camera::lookAt(Vec3f eye, Vec3f at, Vec3f up)
+{
+	//
+	Vec3f Zaxis = { 0,0,1 };
+	Vec3f Yaxis = { 0,1,0 };
+	Vec3f Xaxis = { 1,0,0 };
+
+	at = at - eye;
+	at.normalize();
+	Vec3f atNoy = { at[0],0,at[2] };
+
+
+
+	//up back to +y
+	Vec3f horizAxis = { at[1] * up[2] - at[2] * up[1],at[2] * up[0] - at[0] * up[2] ,at[0] * up[1] - at[1] * up[0] };
+	horizAxis.normalize();
+	atNoy.normalize();
+
+	float temp = 180 / M_PI * asin(at[1] / at.length());
+	float toprotateangle = -1 * 180 / M_PI * asin(at[1] / at.length() )/* * up[1] + (up[1]>0?0:180)*/;
+	glRotatef(toprotateangle + (up[1] > 0 ? 0 : 180), 1 * up[1],0, 0);
+	printf("up to +y: %f \n", toprotateangle);
+
+
+
+	// at to z-
+	temp = (atNoy * -Zaxis) / (atNoy.length() * Zaxis.length());
+	float verticalrotasteangle = 180 / M_PI * acos( temp ) + (up[1] > 0 ? 0 : -180);
+	glRotatef(verticalrotasteangle,  0, at[2] * -Zaxis[0] - at[0] * -Zaxis[2], 0);
+	printf("at to z-: %f \n", verticalrotasteangle);
+
+	glTranslatef(-eye[0], -eye[1], -eye[2]);
+
+
+	printf("U/D: %f\n", toprotateangle);
+	printf("L/R: %f \n\n", verticalrotasteangle);
+
+	//glRotatef();
 }
 
 #pragma warning(pop)
