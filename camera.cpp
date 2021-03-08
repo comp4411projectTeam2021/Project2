@@ -190,42 +190,44 @@ void Camera::applyViewingTransform() {
 
 void Camera::lookAt(Vec3f eye, Vec3f at, Vec3f up)
 {
-	//
-	Vec3f Zaxis = { 0,0,1 };
-	Vec3f Yaxis = { 0,1,0 };
-	Vec3f Xaxis = { 1,0,0 };
+	// Z unit vector
+	const Vec3f Zaxis = { 0,0,1 };
 
+	// make at the lookAt direction vector
 	at = at - eye;
 	at.normalize();
+
+	//at vector project to xz plane
 	Vec3f atNoy = { at[0],0,at[2] };
+	atNoy.normalize();
 
 
 
 	//up back to +y
-	Vec3f horizAxis = { at[1] * up[2] - at[2] * up[1],at[2] * up[0] - at[0] * up[2] ,at[0] * up[1] - at[1] * up[0] };
-	horizAxis.normalize();
-	atNoy.normalize();
 
-	float temp = 180 / M_PI * asin(at[1] / at.length());
-	float toprotateangle = -1 * 180 / M_PI * asin(at[1] / at.length() )/* * up[1] + (up[1]>0?0:180)*/;
-	glRotatef(toprotateangle + (up[1] > 0 ? 0 : 180), 1 * up[1],0, 0);
-	printf("up to +y: %f \n", toprotateangle);
+		//angle of camera looking up+ or down- (angle of attack)
+	float upDownAngle = -1 * 180 / M_PI * asin(at[1] / at.length() );
+	glRotatef(upDownAngle + (up[1] > 0 ? 0 : 180), 1 * up[1],0, 0);
 
 
+	//printf("up to +y: %f \n", toprotateangle);
 
-	// at to z-
-	temp = (atNoy * -Zaxis) / (atNoy.length() * Zaxis.length());
-	float verticalrotasteangle = 180 / M_PI * acos( temp ) + (up[1] > 0 ? 0 : -180);
-	glRotatef(verticalrotasteangle,  0, at[2] * -Zaxis[0] - at[0] * -Zaxis[2], 0);
-	printf("at to z-: %f \n", verticalrotasteangle);
 
+
+	// at back to z-
+	float temp = (atNoy * -Zaxis) / (atNoy.length() * Zaxis.length());
+	float verticalrotasteangle = 180 / M_PI * acos( temp ) + (up[1] > 0 ? 0 : -180)/*this fix flip problem when aoa > 90*/;
+	glRotatef(verticalrotasteangle,  0, at[2] * -Zaxis[0] - at[0] * -Zaxis[2]/*get the direction of rotate*/, 0);
+
+	//printf("at to z-: %f \n", verticalrotasteangle);
+
+	//simple move
 	glTranslatef(-eye[0], -eye[1], -eye[2]);
 
 
-	printf("U/D: %f\n", toprotateangle);
-	printf("L/R: %f \n\n", verticalrotasteangle);
+	//printf("U/D: %f\n", toprotateangle);
+	//printf("L/R: %f \n\n", verticalrotasteangle);
 
-	//glRotatef();
 }
 
 #pragma warning(pop)
