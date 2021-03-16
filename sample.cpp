@@ -124,6 +124,10 @@ int main()
     controls[HEIGHT] = ModelerControl("Height", 1, 2.5, 0.1f, 1);
 	controls[ROTATE] = ModelerControl("Rotate", -135, 135, 1, 0);
 
+	controls[LIGHT_X] = ModelerControl("light X", -100, 100, 1, 0);
+	controls[LIGHT_Y] = ModelerControl("light Y", -100, 100, 1, 0);
+	controls[LIGHT_Z] = ModelerControl("light Z", -100, 100, 1, 0);
+
     ModelerApplication::Instance()->Init(&createSampleModel, controls, NUMCONTROLS);
     return ModelerApplication::Instance()->Run();
 }

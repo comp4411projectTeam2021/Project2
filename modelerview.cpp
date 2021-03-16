@@ -6,10 +6,16 @@
 #include <FL/gl.h>
 #include <GL/glu.h>
 #include <cstdio>
+#include "modelerapp.h"
+#include "modelerglobals.h"
 
 static const int	kMouseRotationButton			= FL_LEFT_MOUSE;
 static const int	kMouseTranslationButton			= FL_MIDDLE_MOUSE;
 static const int	kMouseZoomButton				= FL_RIGHT_MOUSE;
+
+// We'll be getting the instance of the application a lot; 
+// might as well have it as a macro.
+#define VAL(x) (ModelerApplication::Instance()->GetControlValue(x))
 
 ModelerView::ModelerView(int x, int y, int w, int h, char *label)
 : Fl_Gl_Window(x,y,w,h,label)
@@ -101,6 +107,10 @@ void ModelerView::draw()
 	glLoadIdentity();
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_camera->applyViewingTransform();
+
+	lightPosition0[0] = VAL(LIGHT_X);
+	lightPosition0[1] = VAL(LIGHT_Y);
+	lightPosition0[2] = VAL(LIGHT_Z);
 
     glLightfv( GL_LIGHT0, GL_POSITION, lightPosition0 );
     glLightfv( GL_LIGHT0, GL_DIFFUSE, lightDiffuse0 );
