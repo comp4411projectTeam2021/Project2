@@ -111,7 +111,7 @@ void SampleModel::draw()
 
 	glPopMatrix();
 }
-
+/*
 int main()
 {
 	// Initialize the controls
@@ -131,3 +131,4 @@ int main()
     ModelerApplication::Instance()->Init(&createSampleModel, controls, NUMCONTROLS);
     return ModelerApplication::Instance()->Run();
 }
+*/
