@@ -117,9 +117,21 @@ void MyModel::draw()
 			glRotated(VAL(ARM_LEFT2_2), 1.0, 0.0, 0.0);
 			glRotated(10, 1.0, 0.0, 0.0);
 			drawBox(-.3, .3, 1.4);
-				//glPushMatrix();
-
-				//glPopMatrix();
+				glPushMatrix();
+				glTranslated(-.2, .15, 1.2);
+				glRotated(-90 + VAL(ARM_LEFT1), 0.0, 1.0, 0.0);
+				drawCylinder(1.5, 0.15, 0.15);
+					glPushMatrix();
+					glTranslated(0, 0, 1.4);
+					glRotated(30, 0.0, 1.0, 0.0);
+					drawCylinder(0.8, 0.15, 0.1);
+					glPopMatrix();
+					glPushMatrix();
+					glTranslated(-0.1, 0, 1.6);
+					glRotated(-10 + VAL(JAW_LEFT), 0.0, 1.0, 0.0);
+					drawCylinder(1.1, 0.1, 0.05);
+					glPopMatrix();
+				glPopMatrix();
 			glPopMatrix();
 
 			glPushMatrix();
@@ -128,6 +140,11 @@ void MyModel::draw()
 			glRotated(VAL(ARM_RIGHT2_2), 1.0, 0.0, 0.0);
 			glRotated(10, 1.0, 0.0, 0.0);
 			drawBox(.3, .3, 1.4);
+				glPushMatrix();
+				glTranslated(.2, .15, 1.2);
+				glRotated(90 + VAL(ARM_RIGHT1), 0.0, 1.0, 0.0);
+				drawCylinder(1.5, 0.15, 0.15);
+				glPopMatrix();
 			glPopMatrix();
 		glPopMatrix();
 		
@@ -217,8 +234,8 @@ int main()
 	controls[ARM_RIGHT2_1] = ModelerControl("Right Arm-2 Angle-1", -15, 15, 0.1f, 0);
 	controls[ARM_LEFT2_2] = ModelerControl("Left Arm-2 Angle-2", -8, 8, 0.1f, 0);
 	controls[ARM_RIGHT2_2] = ModelerControl("Right Arm-2 Angle-2", -8, 8, 0.1f, 0);
-	controls[JAW_LEFT] = ModelerControl("Left Jaw Angle", 0, 15, 0.1f, 0);
-	controls[JAW_RIGHT] = ModelerControl("Right Jaw Angle", 0, 15, 0.1f, 0);
+	controls[JAW_LEFT] = ModelerControl("Left Jaw Angle", -8, 8, 0.1f, 0);
+	controls[JAW_RIGHT] = ModelerControl("Right Jaw Angle", -8, 8, 0.1f, 0);
 	controls[TAIL1] = ModelerControl("Tail-1 Angle", -15, 15, 0.1f, 0);
 	controls[TAIL2] = ModelerControl("Tail-2 Angle", -15, 15, 0.1f, 0);
 	controls[TAIL3] = ModelerControl("Tail-3 Angle", -15, 15, 0.1f, 0);
