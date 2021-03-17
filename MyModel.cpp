@@ -4,6 +4,7 @@
 #include "modelerapp.h"
 #include "modelerdraw.h"
 #include <FL/gl.h>
+#include "FBXManager.h"
 
 #include "modelerglobals.h"
 
@@ -33,63 +34,69 @@ void MyModel::draw()
 	// projection matrix, don't bother with this ...
 	ModelerView::draw();
 	
-	// draw the floor
-	setAmbientColor(.1f, .1f, .1f);
-	setDiffuseColor(COLOR_RED);
-	/*
-	glPushMatrix();
-	glTranslated(-5, 0, -5);
-	drawBox(10, 0.01f, 10);
-	glPopMatrix();
-*/
+	if (FBXManager::getFbxManager()->loaded) {
+		FBXManager* fbxManager = FBXManager::getFbxManager();
+		fbxManager->drawSceneGL();
+	}
+	else {
+
+		// draw the floor
+		setAmbientColor(.1f, .1f, .1f);
+		setDiffuseColor(COLOR_RED);
+		/*
+		glPushMatrix();
+		glTranslated(-5, 0, -5);
+		drawBox(10, 0.01f, 10);
+		glPopMatrix();
+	*/
 	//Draw some test obj
-	glPushMatrix();
-	setDiffuseColor(0.3, 0, 0);
-	glTranslated(-5, 0, 0);
-	drawBox(1, 1, 1);
-	glPopMatrix();
+		glPushMatrix();
+		setDiffuseColor(0.3, 0, 0);
+		glTranslated(-5, 0, 0);
+		drawBox(1, 1, 1);
+		glPopMatrix();
 
 
-	glPushMatrix();
-	setDiffuseColor(COLOR_RED);
-	glTranslated(5, 0, 0);
-	drawBox(1, 1, 1);
-	glPopMatrix();
+		glPushMatrix();
+		setDiffuseColor(COLOR_RED);
+		glTranslated(5, 0, 0);
+		drawBox(1, 1, 1);
+		glPopMatrix();
 
-	glPushMatrix();
-	setDiffuseColor(0, 0.3, 0);
-	glTranslated(0, -5, 0);
-	drawBox(1, 1, 1);
-	glPopMatrix();
-
-
-	glPushMatrix();
-	setDiffuseColor(COLOR_GREEN);
-	glTranslated(0, 5, 0);
-	drawBox(1, 1, 1);
-	glPopMatrix();
-
-	glPushMatrix();
-	setDiffuseColor(0, 0, 0.3);
-	glTranslated(0, 0, -5);
-	drawBox(1, 1, 1);
-	glPopMatrix();
+		glPushMatrix();
+		setDiffuseColor(0, 0.3, 0);
+		glTranslated(0, -5, 0);
+		drawBox(1, 1, 1);
+		glPopMatrix();
 
 
-	glPushMatrix();
-	setDiffuseColor(COLOR_BLUE);
-	glTranslated(0, 0, 5);
-	drawBox(1, 1, 1);
-	glPopMatrix();
-	
-	//test obj end
+		glPushMatrix();
+		setDiffuseColor(COLOR_GREEN);
+		glTranslated(0, 5, 0);
+		drawBox(1, 1, 1);
+		glPopMatrix();
 
-	// draw the sample model
-	setAmbientColor(.1f, .1f, .1f);
-	setDiffuseColor(.4f,0,.2f);
+		glPushMatrix();
+		setDiffuseColor(0, 0, 0.3);
+		glTranslated(0, 0, -5);
+		drawBox(1, 1, 1);
+		glPopMatrix();
 
-	glPushMatrix();
-	glTranslated(VAL(XPOS), VAL(YPOS), VAL(ZPOS));
+
+		glPushMatrix();
+		setDiffuseColor(COLOR_BLUE);
+		glTranslated(0, 0, 5);
+		drawBox(1, 1, 1);
+		glPopMatrix();
+
+		//test obj end
+
+		// draw the sample model
+		setAmbientColor(.1f, .1f, .1f);
+		setDiffuseColor(.4f, 0, .2f);
+
+		glPushMatrix();
+		glTranslated(VAL(XPOS), VAL(YPOS), VAL(ZPOS));
 
 		glPushMatrix();
 		glRotated(VAL(FRONT_BODY), 0.0, 1.0, 0.0);
@@ -97,57 +104,57 @@ void MyModel::draw()
 		drawBox(2, 1.2, 1);
 		glTranslated(0.4, 0.1, 1);
 		drawBox(1.2, 1, 0.8);
-			glPushMatrix();
-			glTranslated(-.4, -.4, -.8);//2.9 -1.7
-			glRotated(-80 + VAL(LEG_RIGHT1), 0.0, 1.0, 0.0);
-			glRotated(30, 1.0, 0.0, 0.0);
-			drawBox(.3, .3, 1.5);
-			glPopMatrix();
-
-			glPushMatrix();
-			glTranslated(1.6, -.4, -.8);
-			glRotated(80 + VAL(LEG_LEFT1), 0.0, 1.0, 0.0);
-			glRotated(30, 1.0, 0.0, 0.0);
-			drawBox(-.3, .3, 1.5);
-			glPopMatrix();
-
-			glPushMatrix();
-			glTranslated(1.8, .4, -.4);
-			glRotated(75 + VAL(ARM_LEFT2_1), 0.0, 1.0, 0.0);
-			glRotated(VAL(ARM_LEFT2_2), 1.0, 0.0, 0.0);
-			glRotated(10, 1.0, 0.0, 0.0);
-			drawBox(-.3, .3, 1.4);
-				glPushMatrix();
-				glTranslated(-.2, .15, 1.2);
-				glRotated(-90 + VAL(ARM_LEFT1), 0.0, 1.0, 0.0);
-				drawCylinder(1.5, 0.15, 0.15);
-					glPushMatrix();
-					glTranslated(0, 0, 1.4);
-					glRotated(30, 0.0, 1.0, 0.0);
-					drawCylinder(0.8, 0.15, 0.1);
-					glPopMatrix();
-					glPushMatrix();
-					glTranslated(-0.1, 0, 1.6);
-					glRotated(-10 + VAL(JAW_LEFT), 0.0, 1.0, 0.0);
-					drawCylinder(1.1, 0.1, 0.05);
-					glPopMatrix();
-				glPopMatrix();
-			glPopMatrix();
-
-			glPushMatrix();
-			glTranslated(-0.6, .4, -.4);
-			glRotated(-75 + VAL(ARM_RIGHT2_1), 0.0, 1.0, 0.0);
-			glRotated(VAL(ARM_RIGHT2_2), 1.0, 0.0, 0.0);
-			glRotated(10, 1.0, 0.0, 0.0);
-			drawBox(.3, .3, 1.4);
-				glPushMatrix();
-				glTranslated(.2, .15, 1.2);
-				glRotated(90 + VAL(ARM_RIGHT1), 0.0, 1.0, 0.0);
-				drawCylinder(1.5, 0.15, 0.15);
-				glPopMatrix();
-			glPopMatrix();
+		glPushMatrix();
+		glTranslated(-.4, -.4, -.8);//2.9 -1.7
+		glRotated(-80 + VAL(LEG_RIGHT1), 0.0, 1.0, 0.0);
+		glRotated(30, 1.0, 0.0, 0.0);
+		drawBox(.3, .3, 1.5);
 		glPopMatrix();
-		
+
+		glPushMatrix();
+		glTranslated(1.6, -.4, -.8);
+		glRotated(80 + VAL(LEG_LEFT1), 0.0, 1.0, 0.0);
+		glRotated(30, 1.0, 0.0, 0.0);
+		drawBox(-.3, .3, 1.5);
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(1.8, .4, -.4);
+		glRotated(75 + VAL(ARM_LEFT2_1), 0.0, 1.0, 0.0);
+		glRotated(VAL(ARM_LEFT2_2), 1.0, 0.0, 0.0);
+		glRotated(10, 1.0, 0.0, 0.0);
+		drawBox(-.3, .3, 1.4);
+		glPushMatrix();
+		glTranslated(-.2, .15, 1.2);
+		glRotated(-90 + VAL(ARM_LEFT1), 0.0, 1.0, 0.0);
+		drawCylinder(1.5, 0.15, 0.15);
+		glPushMatrix();
+		glTranslated(0, 0, 1.4);
+		glRotated(30, 0.0, 1.0, 0.0);
+		drawCylinder(0.8, 0.15, 0.1);
+		glPopMatrix();
+		glPushMatrix();
+		glTranslated(-0.1, 0, 1.6);
+		glRotated(-10 + VAL(JAW_LEFT), 0.0, 1.0, 0.0);
+		drawCylinder(1.1, 0.1, 0.05);
+		glPopMatrix();
+		glPopMatrix();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(-0.6, .4, -.4);
+		glRotated(-75 + VAL(ARM_RIGHT2_1), 0.0, 1.0, 0.0);
+		glRotated(VAL(ARM_RIGHT2_2), 1.0, 0.0, 0.0);
+		glRotated(10, 1.0, 0.0, 0.0);
+		drawBox(.3, .3, 1.4);
+		glPushMatrix();
+		glTranslated(.2, .15, 1.2);
+		glRotated(90 + VAL(ARM_RIGHT1), 0.0, 1.0, 0.0);
+		drawCylinder(1.5, 0.15, 0.15);
+		glPopMatrix();
+		glPopMatrix();
+		glPopMatrix();
+
 
 
 		glPushMatrix();
@@ -156,57 +163,58 @@ void MyModel::draw()
 		drawBox(2, 1.2, 1);
 		glTranslated(0.4, 0.1, -.8);
 		drawBox(1.2, 1, 0.8);
-			glPushMatrix();
-			glTranslated(1.5, -.4, .7);
-			glRotated(-45 + VAL(LEG_LEFT3), 0.0, 1.0, 0.0);
-			glRotated(-30, 1.0, 0.0, 0.0);
-			drawBox(.3, .3, -1.5);
-			glPopMatrix();
-
-			glPushMatrix();
-			glTranslated(-.3, -.4, .7);
-			glRotated(45 + VAL(LEG_RIGHT3), 0.0, 1.0, 0.0);
-			glRotated(-30, 1.0, 0.0, 0.0);
-			drawBox(-.3, .3, -1.5);
-			glPopMatrix();
-
-			glPushMatrix();
-			glTranslated(1.6, -.4, 1.4);
-			glRotated(-80 + VAL(LEG_LEFT2), 0.0, 1.0, 0.0);
-			glRotated(-30, 1.0, 0.0, 0.0);
-			drawBox(.3, .3, -1.5);
-			glPopMatrix();
-
-			glPushMatrix();
-			glTranslated(-.4, -.4, 1.4);
-			glRotated(80 + VAL(LEG_RIGHT2), 0.0, 1.0, 0.0);
-			glRotated(-30, 1.0, 0.0, 0.0);
-			drawBox(-.3, .3, -1.5);
-			glPopMatrix();
-		glPopMatrix();
-	/*
 		glPushMatrix();
-		glTranslated(-1.5, 0, -2);
-		glScaled(3, 1, 4);
-		drawBox(1, 1, 1);
+		glTranslated(1.5, -.4, .7);
+		glRotated(-45 + VAL(LEG_LEFT3), 0.0, 1.0, 0.0);
+		glRotated(-30, 1.0, 0.0, 0.0);
+		drawBox(.3, .3, -1.5);
 		glPopMatrix();
 
-		// draw cannon
 		glPushMatrix();
-		glRotated(VAL(ROTATE), 0.0, 1.0, 0.0);
-		glRotated(-90, 1.0, 0.0, 0.0);
-		drawCylinder(VAL(HEIGHT), 0.1, 0.1);
-
-		glTranslated(0.0, 0.0, VAL(HEIGHT));
-		drawCylinder(1, 1.0, 0.9);
-
-		glTranslated(0.0, 0.0, 0.5);
-		glRotated(90, 1.0, 0.0, 0.0);
-		drawCylinder(4, 0.1, 0.2);
+		glTranslated(-.3, -.4, .7);
+		glRotated(45 + VAL(LEG_RIGHT3), 0.0, 1.0, 0.0);
+		glRotated(-30, 1.0, 0.0, 0.0);
+		drawBox(-.3, .3, -1.5);
 		glPopMatrix();
-		*/
-		
-	glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(1.6, -.4, 1.4);
+		glRotated(-80 + VAL(LEG_LEFT2), 0.0, 1.0, 0.0);
+		glRotated(-30, 1.0, 0.0, 0.0);
+		drawBox(.3, .3, -1.5);
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(-.4, -.4, 1.4);
+		glRotated(80 + VAL(LEG_RIGHT2), 0.0, 1.0, 0.0);
+		glRotated(-30, 1.0, 0.0, 0.0);
+		drawBox(-.3, .3, -1.5);
+		glPopMatrix();
+		glPopMatrix();
+		/*
+			glPushMatrix();
+			glTranslated(-1.5, 0, -2);
+			glScaled(3, 1, 4);
+			drawBox(1, 1, 1);
+			glPopMatrix();
+
+			// draw cannon
+			glPushMatrix();
+			glRotated(VAL(ROTATE), 0.0, 1.0, 0.0);
+			glRotated(-90, 1.0, 0.0, 0.0);
+			drawCylinder(VAL(HEIGHT), 0.1, 0.1);
+
+			glTranslated(0.0, 0.0, VAL(HEIGHT));
+			drawCylinder(1, 1.0, 0.9);
+
+			glTranslated(0.0, 0.0, 0.5);
+			glRotated(90, 1.0, 0.0, 0.0);
+			drawCylinder(4, 0.1, 0.2);
+			glPopMatrix();
+			*/
+
+		glPopMatrix();
+	}
 }
 
 int main()

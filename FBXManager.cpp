@@ -102,11 +102,10 @@ bool FBXManager::drawNodes(FbxNode* pNode)
 
 			}
 			//assume 3/4 edge 
-			if(numOfVertices == 3)
+			if(numOfVertices >= 3)
 				drawTriangle(vertex[0], vertex[1], vertex[2], vertex[3], vertex[4], vertex[5], vertex[6], vertex[7], vertex[8]);
-			if (numOfVertices == 4) {
+			if (numOfVertices >= 4) {
 				drawTriangle(vertex[0], vertex[1], vertex[2], vertex[6], vertex[7], vertex[8],  vertex[9], vertex[10], vertex[11]);
-
 			}
 		}
 
