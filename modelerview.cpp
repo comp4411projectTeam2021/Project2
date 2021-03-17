@@ -101,7 +101,7 @@ void ModelerView::draw()
   	glViewport( 0, 0, w(), h() );
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(30.0,float(w())/float(h()),1.0,100.0);
+	gluPerspective(30.0,float(w())/float(h()),1.0,100000.0);
 				
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

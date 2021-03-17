@@ -14,6 +14,7 @@
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Pack.H>
 #include "modelerapp.h"
+#include "FBXManager.h"
 
 class ModelerUserInterface {
 public:
@@ -34,6 +35,7 @@ private:
 // callback functions for saving the position of the model.
   inline void cb_SavePos_i(Fl_Menu_*, void*);
   static void cb_SavePos(Fl_Menu_*, void*);
+  static void cb_LoadFbx(Fl_Menu_* o, void* v);
   inline void cb_OpenPos_i(Fl_Menu_*, void*);
   static void cb_OpenPos(Fl_Menu_*, void*);
 
