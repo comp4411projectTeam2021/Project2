@@ -163,7 +163,7 @@ void MyModel::draw()
 		drawBox(-.3, .3, 1.5);
 		glPopMatrix();
 
-<<<<<<< HEAD
+
 			glPushMatrix();
 			glTranslated(1.8, .4, -.4);
 			glRotated(75 + VAL(ARM_LEFT2_1), 0.0, 1.0, 0.0);
@@ -243,7 +243,7 @@ void MyModel::draw()
 		
 		/*glPushMatrix();
 		glPopMatrix();*/
-=======
+		/*
 		glPushMatrix();
 		glTranslated(1.8, .4, -.4);
 		glRotated(75 + VAL(ARM_LEFT2_1), 0.0, 1.0, 0.0);
@@ -280,9 +280,9 @@ void MyModel::draw()
 		glPopMatrix();
 		glPopMatrix();
 		glPopMatrix();
+*/
 
 
->>>>>>> 363a873c9b29dd24ede192b90ec51ed1c99821df
 
 		glPushMatrix();
 		glRotated(VAL(BACK_BODY), 0.0, 1.0, 0.0);
@@ -290,34 +290,34 @@ void MyModel::draw()
 		drawBox(2, 1.2, 1);
 		glTranslated(0.4, 0.1, -.8);
 		drawBox(1.2, 1, 0.8);
-		glPushMatrix();
-		glTranslated(1.5, -.4, .7);
-		glRotated(-45 + VAL(LEG_LEFT3), 0.0, 1.0, 0.0);
-		glRotated(-30, 1.0, 0.0, 0.0);
-		drawBox(.3, .3, -1.5);
-		glPopMatrix();
+			glPushMatrix();
+			glTranslated(1.5, -.4, .7);
+			glRotated(-45 + VAL(LEG_LEFT3), 0.0, 1.0, 0.0);
+			glRotated(-30, 1.0, 0.0, 0.0);
+			drawBox(.3, .3, -1.5);
+			glPopMatrix();
 
-		glPushMatrix();
-		glTranslated(-.3, -.4, .7);
-		glRotated(45 + VAL(LEG_RIGHT3), 0.0, 1.0, 0.0);
-		glRotated(-30, 1.0, 0.0, 0.0);
-		drawBox(-.3, .3, -1.5);
-		glPopMatrix();
+			glPushMatrix();
+			glTranslated(-.3, -.4, .7);
+			glRotated(45 + VAL(LEG_RIGHT3), 0.0, 1.0, 0.0);
+			glRotated(-30, 1.0, 0.0, 0.0);
+			drawBox(-.3, .3, -1.5);
+			glPopMatrix();
 
-		glPushMatrix();
-		glTranslated(1.6, -.4, 1.4);
-		glRotated(-80 + VAL(LEG_LEFT2), 0.0, 1.0, 0.0);
-		glRotated(-30, 1.0, 0.0, 0.0);
-		drawBox(.3, .3, -1.5);
-		glPopMatrix();
+			glPushMatrix();
+			glTranslated(1.6, -.4, 1.4);
+			glRotated(-80 + VAL(LEG_LEFT2), 0.0, 1.0, 0.0);
+			glRotated(-30, 1.0, 0.0, 0.0);
+			drawBox(.3, .3, -1.5);
+			glPopMatrix();
 
-		glPushMatrix();
-		glTranslated(-.4, -.4, 1.4);
-		glRotated(80 + VAL(LEG_RIGHT2), 0.0, 1.0, 0.0);
-		glRotated(-30, 1.0, 0.0, 0.0);
-		drawBox(-.3, .3, -1.5);
-		glPopMatrix();
-		glPopMatrix();
+			glPushMatrix();
+			glTranslated(-.4, -.4, 1.4);
+			glRotated(80 + VAL(LEG_RIGHT2), 0.0, 1.0, 0.0);
+			glRotated(-30, 1.0, 0.0, 0.0);
+			drawBox(-.3, .3, -1.5);
+			glPopMatrix();
+		
 		/*
 			glPushMatrix();
 			glTranslated(-1.5, 0, -2);
@@ -327,13 +327,12 @@ void MyModel::draw()
 
 			// draw cannon
 			glPushMatrix();
-<<<<<<< HEAD
 			glTranslated(-.4, -.4, 1.4);
 			glRotated(80 + VAL(LEG_RIGHT2), 0.0, 1.0, 0.0);
 			glRotated(-30, 1.0, 0.0, 0.0);
 			drawBox(-.3, .3, -1.5);
 			glPopMatrix();
-
+*/
 			glPushMatrix();
 			glRotated(30 + VAL(TAIL1), 1.0, 0.0, 0.0);
 			glTranslated(0.3, 0.1, 0);
@@ -367,11 +366,9 @@ void MyModel::draw()
 		glScaled(3, 1, 4);
 		drawBox(1, 1, 1);
 		glPopMatrix();
-=======
 			glRotated(VAL(ROTATE), 0.0, 1.0, 0.0);
 			glRotated(-90, 1.0, 0.0, 0.0);
 			drawCylinder(VAL(HEIGHT), 0.1, 0.1);
->>>>>>> 363a873c9b29dd24ede192b90ec51ed1c99821df
 
 			glTranslated(0.0, 0.0, VAL(HEIGHT));
 			drawCylinder(1, 1.0, 0.9);
