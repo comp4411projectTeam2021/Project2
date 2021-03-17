@@ -57,7 +57,7 @@ void MyModel::draw()
 
 		// 加载并生成纹理
 		int width, height, nrChannels;
-		unsigned char* data = stbi_load("testTexture.jpg", &width, &height, &nrChannels, 0);
+		unsigned char* data = stbi_load("鳞片.jpg", &width, &height, &nrChannels, 0);
 
 		if (data)
 		{
@@ -146,21 +146,21 @@ void MyModel::draw()
 		glPushMatrix();
 		glRotated(VAL(FRONT_BODY), 0.0, 1.0, 0.0);
 		glTranslated(-1, 0, .1);
-		drawBox(2, 1.2, 1);
+		drawTextureBox(2, 1.2, 1);
 		glTranslated(0.4, 0.1, 1);
-		drawBox(1.2, 1, 0.8);
+		drawTextureBox(1.2, 1, 0.8);
 		glPushMatrix();
 		glTranslated(-.4, -.4, -.8);//2.9 -1.7
 		glRotated(-80 + VAL(LEG_RIGHT1), 0.0, 1.0, 0.0);
 		glRotated(30, 1.0, 0.0, 0.0);
-		drawBox(.3, .3, 1.5);
+		drawTextureBox(.3, .3, 1.5);
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslated(1.6, -.4, -.8);
 		glRotated(80 + VAL(LEG_LEFT1), 0.0, 1.0, 0.0);
 		glRotated(30, 1.0, 0.0, 0.0);
-		drawBox(-.3, .3, 1.5);
+		drawTextureBox(-.3, .3, 1.5);
 		glPopMatrix();
 
 
@@ -169,7 +169,7 @@ void MyModel::draw()
 			glRotated(75 + VAL(ARM_LEFT2_1), 0.0, 1.0, 0.0);
 			glRotated(VAL(ARM_LEFT2_2), 1.0, 0.0, 0.0);
 			glRotated(10, 1.0, 0.0, 0.0);
-			drawBox(-.3, .3, 1.4);
+			drawTextureBox(-.3, .3, 1.4);
 				glPushMatrix();
 				glTranslated(-.2, .15, 1.2);
 				glRotated(-90 + VAL(ARM_LEFT1), 0.0, 1.0, 0.0);
@@ -207,7 +207,7 @@ void MyModel::draw()
 			glRotated(-75 + VAL(ARM_RIGHT2_1), 0.0, 1.0, 0.0);
 			glRotated(VAL(ARM_RIGHT2_2), 1.0, 0.0, 0.0);
 			glRotated(10, 1.0, 0.0, 0.0);
-			drawBox(.3, .3, 1.4);
+			drawTextureBox(.3, .3, 1.4);
 				glPushMatrix();
 				glTranslated(.2, .15, 1.2);
 				glRotated(90 + VAL(ARM_RIGHT1), 0.0, 1.0, 0.0);
@@ -287,35 +287,35 @@ void MyModel::draw()
 		glPushMatrix();
 		glRotated(VAL(BACK_BODY), 0.0, 1.0, 0.0);
 		glTranslated(-1, 0, -1.1);
-		drawBox(2, 1.2, 1);
+		drawTextureBox(2, 1.2, 1);
 		glTranslated(0.4, 0.1, -.8);
-		drawBox(1.2, 1, 0.8);
+		drawTextureBox(1.2, 1, 0.8);
 			glPushMatrix();
 			glTranslated(1.5, -.4, .7);
 			glRotated(-45 + VAL(LEG_LEFT3), 0.0, 1.0, 0.0);
 			glRotated(-30, 1.0, 0.0, 0.0);
-			drawBox(.3, .3, -1.5);
+			drawTextureBox(.3, .3, -1.5);
 			glPopMatrix();
 
 			glPushMatrix();
 			glTranslated(-.3, -.4, .7);
 			glRotated(45 + VAL(LEG_RIGHT3), 0.0, 1.0, 0.0);
 			glRotated(-30, 1.0, 0.0, 0.0);
-			drawBox(-.3, .3, -1.5);
+			drawTextureBox(-.3, .3, -1.5);
 			glPopMatrix();
 
 			glPushMatrix();
 			glTranslated(1.6, -.4, 1.4);
 			glRotated(-80 + VAL(LEG_LEFT2), 0.0, 1.0, 0.0);
 			glRotated(-30, 1.0, 0.0, 0.0);
-			drawBox(.3, .3, -1.5);
+			drawTextureBox(.3, .3, -1.5);
 			glPopMatrix();
 
 			glPushMatrix();
 			glTranslated(-.4, -.4, 1.4);
 			glRotated(80 + VAL(LEG_RIGHT2), 0.0, 1.0, 0.0);
 			glRotated(-30, 1.0, 0.0, 0.0);
-			drawBox(-.3, .3, -1.5);
+			drawTextureBox(-.3, .3, -1.5);
 			glPopMatrix();
 		
 		/*
@@ -336,19 +336,19 @@ void MyModel::draw()
 			glPushMatrix();
 			glRotated(30 + VAL(TAIL1), 1.0, 0.0, 0.0);
 			glTranslated(0.3, 0.1, 0);
-			drawBox(.6, .6, -1.2);
+			drawTextureBox(.6, .6, -1.2);
 				glPushMatrix();
 				glTranslated(.05, 0.06, -1.2);
 				glRotated(30 + VAL(TAIL2), 1.0, 0.0, 0.0);
-				drawBox(.5, .5, -1.2);
+				drawTextureBox(.5, .5, -1.2);
 					glPushMatrix();
 					glTranslated(.05, 0.06, -1.2);
 					glRotated(30 + VAL(TAIL3), 1.0, 0.0, 0.0);
-					drawBox(.4, .4, -1.2);
+					drawTextureBox(.4, .4, -1.2);
 						glPushMatrix();
 						glTranslated(.05, 0.06, -1.2);
 						glRotated(30 + VAL(TAIL4), 1.0, 0.0, 0.0);
-						drawBox(.3, .3, -1);
+						drawTextureBox(.3, .3, -1);
 							glPushMatrix();
 							glTranslated(.15, .15, -.9);
 							glRotated(VAL(HOOK1), 0.0, 1.0, 0.0);
