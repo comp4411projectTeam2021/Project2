@@ -1,6 +1,6 @@
+#include <gl/glew.h>
 #include "modelerview.h"
 #include "camera.h"
-
 #include <FL/Fl.H>
 #include <FL/Fl_Gl_Window.h>
 #include <FL/gl.h>
@@ -21,6 +21,7 @@ ModelerView::ModelerView(int x, int y, int w, int h, char *label)
 : Fl_Gl_Window(x,y,w,h,label)
 {
     m_camera = new Camera();
+
 }
 
 ModelerView::~ModelerView()
@@ -29,6 +30,16 @@ ModelerView::~ModelerView()
 }
 int ModelerView::handle(int event)
 {
+
+#ifndef __APPLE__
+	static int first = 1;
+	if (first && event == FL_SHOW && shown()) {
+		first = 0;
+		make_current();
+		glewInit(); // defines pters to functions of OpenGL V 1.2 and above
+	}
+#endif
+
     unsigned eventCoordX = Fl::event_x();
 	unsigned eventCoordY = Fl::event_y();
 	unsigned eventButton = Fl::event_button();

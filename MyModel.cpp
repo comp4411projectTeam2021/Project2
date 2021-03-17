@@ -1,21 +1,31 @@
 // The sample model.  You should build a file
 // very similar to this for when you make your model.
+#include <gl/glew.h>
 #include "modelerview.h"
 #include "modelerapp.h"
 #include "modelerdraw.h"
-#include <FL/gl.h>
 #include "FBXManager.h"
 
 #include "modelerglobals.h"
+//#include "Shader.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+#include <FL/gl.h>
 
 // To make a MyModel, we inherit off of ModelerView
 class MyModel : public ModelerView
 {
 public:
 	MyModel(int x, int y, int w, int h, char* label)
-		: ModelerView(x, y, w, h, label) { }
+		: ModelerView(x, y, w, h, label) { 
+		
+	}
 
 	virtual void draw();
+	//Shader* testShader = NULL;
+	bool init = false;
+
 };
 
 // We need to make a creator function, mostly because of
@@ -29,6 +39,41 @@ ModelerView* createMyModel(int x, int y, int w, int h, char* label)
 // method of ModelerView to draw out MyModel
 void MyModel::draw()
 {
+	if (!init) {
+		init = true;
+		//testShader = new Shader("shader.vs", "shader.fs");
+		glEnable(GL_TEXTURE_2D);
+
+		GLuint texture;
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		// 为当前绑定的纹理对象设置环绕、过滤方式
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_MIRRORED_REPEAT);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+		// 加载并生成纹理
+		int width, height, nrChannels;
+		unsigned char* data = stbi_load("testTexture.jpg", &width, &height, &nrChannels, 0);
+
+		if (data)
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
+		else
+		{
+			printf("Failed to load texture");
+		}
+		stbi_image_free(data);
+
+	}
+	//testShader->use();
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
 	// This call takes care of a lot of the nasty projection 
 	// matrix stuff.  Unless you want to fudge directly with the 
 	// projection matrix, don't bother with this ...
@@ -53,40 +98,40 @@ void MyModel::draw()
 		glPushMatrix();
 		setDiffuseColor(0.3, 0, 0);
 		glTranslated(-5, 0, 0);
-		drawBox(1, 1, 1);
+		drawTextureBox(1, 1, 1);
 		glPopMatrix();
 
 
 		glPushMatrix();
 		setDiffuseColor(COLOR_RED);
 		glTranslated(5, 0, 0);
-		drawBox(1, 1, 1);
+		drawTextureBox(1, 1, 1);
 		glPopMatrix();
 
 		glPushMatrix();
 		setDiffuseColor(0, 0.3, 0);
 		glTranslated(0, -5, 0);
-		drawBox(1, 1, 1);
+		drawTextureBox(1, 1, 1);
 		glPopMatrix();
 
 
 		glPushMatrix();
 		setDiffuseColor(COLOR_GREEN);
 		glTranslated(0, 5, 0);
-		drawBox(1, 1, 1);
+		drawTextureBox(1, 1, 1);
 		glPopMatrix();
 
 		glPushMatrix();
 		setDiffuseColor(0, 0, 0.3);
 		glTranslated(0, 0, -5);
-		drawBox(1, 1, 1);
+		drawTextureBox(1, 1, 1);
 		glPopMatrix();
 
 
 		glPushMatrix();
 		setDiffuseColor(COLOR_BLUE);
 		glTranslated(0, 0, 5);
-		drawBox(1, 1, 1);
+		drawTextureBox(1, 1, 1);
 		glPopMatrix();
 
 		//test obj end
@@ -253,7 +298,6 @@ int main()
 	controls[LIGHT_X] = ModelerControl("light X", -100, 100, 1, 0);
 	controls[LIGHT_Y] = ModelerControl("light Y", -100, 100, 1, 0);
 	controls[LIGHT_Z] = ModelerControl("light Z", -100, 100, 1, 0);
-
 	ModelerApplication::Instance()->Init(&createMyModel, controls, NUMCONTROLS);
 	return ModelerApplication::Instance()->Run();
 }
