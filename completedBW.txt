@@ -1,4 +1,11 @@
 [B]Change the default light
 
 
+
+Additional feature:
+
+Implemented support for loading .FBX standar model file. Can be access via button under "File". 
+Allow whole model move in xyz
+*Moddel should contains polygon with with 3/4 edges*
+
 Total 0.5

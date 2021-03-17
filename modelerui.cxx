@@ -127,6 +127,19 @@ void ModelerUserInterface::cb_SavePos(Fl_Menu_* o, void* v) {
 	((ModelerUserInterface*)(o->parent()->user_data()))->cb_SavePos_i(o,v);
 }
 
+void ModelerUserInterface::cb_LoadFbx(Fl_Menu_* o, void* v) {
+	char* newfile = fl_file_chooser("Open File?", "*.fbx", FBXManager::getFbxManager()->getFileName());
+	if (newfile != NULL) {
+		if (FBXManager::getFbxManager()->loadFbx(newfile)) {
+			((ModelerUserInterface*)(o->parent()->user_data()))->m_modelerView->redraw();
+
+		}
+		else {
+			fl_message("Fail to load FBX file");
+		}
+	}
+}
+
 inline void ModelerUserInterface::cb_OpenPos_i(Fl_Menu_*, void*) {
 	char *filename = NULL;
 	filename = fl_file_chooser("Open .pos File", "*.pos", NULL);
@@ -252,6 +265,7 @@ Fl_Menu_Item ModelerUserInterface::menu_m_controlsMenuBar[] = {
  {"Save Bitmap File", 0,  (Fl_Callback*)ModelerUserInterface::cb_Save1, 0, 128, 0, 0, 14, 0},
  {"Open Position File", 0, (Fl_Callback*)ModelerUserInterface::cb_OpenPos, 0, 0, 0, 0, 14, 0},
  {"Save Position File", 0, (Fl_Callback*)ModelerUserInterface::cb_SavePos, 0, 128, 0, 0, 14, 0},
+ {"Load Fbx file", 0, (Fl_Callback*)ModelerUserInterface::cb_LoadFbx, 0, 128, 0, 0, 14, 0},
  {"Exit", 0,  (Fl_Callback*)ModelerUserInterface::cb_Exit, 0, 0, 0, 0, 14, 0},
  {0},
  {"View", 0,  0, 0, 64, 0, 0, 14, 0},

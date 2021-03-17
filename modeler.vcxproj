@@ -48,12 +48,12 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>fltk-1.3.3;fltk-1.3.3/jpeg;fltk-1.3.3/png;fltk-1.3.3/zlib;$(IncludePath)</IncludePath>
-    <LibraryPath>fltk-1.3.3/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>Fbx\include;fltk-1.3.3;fltk-1.3.3/jpeg;fltk-1.3.3/png;fltk-1.3.3/zlib;$(IncludePath)</IncludePath>
+    <LibraryPath>Fbx\lib\vs2019\x86\release;fltk-1.3.3/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>fltk-1.3.3;fltk-1.3.3\jpeg;fltk-1.3.3\png;fltk-1.3.3\zlib;$(IncludePath)</IncludePath>
-    <LibraryPath>fltk-1.3.3\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>glew-2.1.0\include\;Fbx\include;fltk-1.3.3;fltk-1.3.3\jpeg;fltk-1.3.3\png;fltk-1.3.3\zlib;$(IncludePath)</IncludePath>
+    <LibraryPath>Fbx\lib\vs2019\x86\debug;fltk-1.3.3\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
@@ -124,10 +124,10 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>fltkd.lib;fltkgld.lib;opengl32.lib;glu32.lib;wsock32.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;libfbxsdk.lib;glew32.lib;fltkd.lib;fltkgld.lib;opengl32.lib;glu32.lib;wsock32.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Debug/modeler.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>local\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>glew-2.1.0\lib\Release\Win32;Fbx\lib\vs2019\x86\debug;local\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\Debug/modeler.pdb</ProgramDatabaseFile>
@@ -155,6 +155,7 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="FBXManager.cpp" />
     <ClCompile Include="modelerapp.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -184,12 +185,14 @@
   <ItemGroup>
     <ClInclude Include="bitmap.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="FBXManager.h" />
     <ClInclude Include="mat.h" />
     <ClInclude Include="modelerapp.h" />
     <ClInclude Include="modelerdraw.h" />
     <ClInclude Include="modelerglobals.h" />
     <ClInclude Include="modelerui.h" />
     <ClInclude Include="modelerview.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="vec.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
