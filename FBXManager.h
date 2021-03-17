@@ -1,7 +1,8 @@
 #pragma once
 #include "fbxsdk.h"
 #include "modelerdraw.h"
-
+#include "modelerglobals.h"
+#include "modelerapp.h"
 
 class FBXManager
 {
@@ -17,6 +18,7 @@ public:
 
 	void drawSceneGL();
 
+	// internal use
 private:
 	FBXManager();
 

@@ -37,8 +37,7 @@ bool FBXManager::loadFbx(char* path)
 		lScene = FbxScene::Create(lSdkManager, "myScene");
 
 		// Import the contents of the file into the scene.
-		lImporter->Import(lScene);
-		loaded = true;
+		loaded = lImporter->Import(lScene);
 		// The file is imported, so get rid of the importer.
 		lImporter->Destroy();
 	}
@@ -52,6 +51,7 @@ void FBXManager::drawSceneGL()
 	setDiffuseColor(COLOR_GREEN);
 	FbxNode* lRootNode = lScene->GetRootNode();
 	if (lRootNode) {
+		glTranslated(VAL(XPOS), VAL(YPOS), VAL(ZPOS));
 		for (int i = 0; i < lRootNode->GetChildCount(); i++)
 			drawNodes(lRootNode->GetChild(i));
 	}
@@ -80,6 +80,7 @@ bool FBXManager::drawNodes(FbxNode* pNode)
 	glRotated(rotation[1], 0, 1, 0);
 	glRotated(rotation[2], 0, 0, 1);
 	glScaled(scaling[0], scaling[1], scaling[2]);
+
 
 	fbxsdk::FbxMesh* pMesh = pNode->GetMesh();
 
@@ -111,8 +112,10 @@ bool FBXManager::drawNodes(FbxNode* pNode)
 
 
 	}
-		for (int j = 0; j < pNode->GetChildCount(); j++)
-			drawNodes(pNode->GetChild(j));
+
+	// Draw childrens
+	for (int j = 0; j < pNode->GetChildCount(); j++)
+		drawNodes(pNode->GetChild(j));
 
 	glPopMatrix();
 	return false;

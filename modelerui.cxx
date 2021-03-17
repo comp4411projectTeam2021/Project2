@@ -130,8 +130,13 @@ void ModelerUserInterface::cb_SavePos(Fl_Menu_* o, void* v) {
 void ModelerUserInterface::cb_LoadFbx(Fl_Menu_* o, void* v) {
 	char* newfile = fl_file_chooser("Open File?", "*.fbx", FBXManager::getFbxManager()->getFileName());
 	if (newfile != NULL) {
-		FBXManager::getFbxManager()->loadFbx(newfile);
-		((ModelerUserInterface*)(o->parent()->user_data()))->m_modelerView->redraw();
+		if (FBXManager::getFbxManager()->loadFbx(newfile)) {
+			((ModelerUserInterface*)(o->parent()->user_data()))->m_modelerView->redraw();
+
+		}
+		else {
+			fl_message("Fail to load FBX file");
+		}
 	}
 }
 
