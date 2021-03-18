@@ -1,4 +1,5 @@
 [B]Change the default light
+[W]Texture on model(support multiple textures)
 
 
 
@@ -8,4 +9,4 @@ Implemented support for loading .FBX standar model file. Can be access via butto
 Allow whole model move in xyz
 *Moddel should contains polygon with with 3/4 edges*
 
-Total 0.5
+Total 1.5

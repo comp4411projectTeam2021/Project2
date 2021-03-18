@@ -12,6 +12,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include <FL/gl.h>
+#include <vector>
 
 // To make a MyModel, we inherit off of ModelerView
 class MyModel : public ModelerView
@@ -25,7 +26,7 @@ public:
 	virtual void draw();
 	//Shader* testShader = NULL;
 	bool init = false;
-
+	std::vector<GLuint*> texture;
 };
 
 // We need to make a creator function, mostly because of
@@ -44,9 +45,8 @@ void MyModel::draw()
 		//testShader = new Shader("shader.vs", "shader.fs");
 		glEnable(GL_TEXTURE_2D);
 
-		GLuint texture;
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
+
+		
 		// 为当前绑定的纹理对象设置环绕、过滤方式
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
@@ -58,17 +58,31 @@ void MyModel::draw()
 		// 加载并生成纹理
 		int width, height, nrChannels;
 		unsigned char* data = stbi_load("鳞片.jpg", &width, &height, &nrChannels, 0);
-
+		unsigned char* data2;
 		if (data)
 		{
+			texture.push_back( new GLuint);
+			glGenTextures(1, texture[0]);
+			glBindTexture(GL_TEXTURE_2D, *texture[0]);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 			glGenerateMipmap(GL_TEXTURE_2D);
+
+			data2 = stbi_load("testTexture.jpg", &width, &height, &nrChannels, 0);
+
+			texture.push_back(new GLuint);
+			glGenTextures(1, texture[1]);
+			glBindTexture(GL_TEXTURE_2D, *texture[1]);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data2);
+			glGenerateMipmap(GL_TEXTURE_2D);
+
+
 		}
 		else
 		{
 			printf("Failed to load texture");
 		}
-		stbi_image_free(data);
+			stbi_image_free(data);
+			stbi_image_free(data2);
 
 	}
 	//testShader->use();
@@ -95,6 +109,8 @@ void MyModel::draw()
 		glPopMatrix();
 	*/
 	//Draw some test obj
+		glBindTexture(GL_TEXTURE_2D, *texture[1]);
+
 		glPushMatrix();
 		setDiffuseColor(0.3, 0, 0);
 		glTranslated(-5, 0, 0);
@@ -134,7 +150,11 @@ void MyModel::draw()
 		drawTextureBox(1, 1, 1);
 		glPopMatrix();
 
+		//glDeleteTextures(1, &texture);
 		//test obj end
+
+		//change testure
+		glBindTexture(GL_TEXTURE_2D, *texture[0]);
 
 		// draw the sample model
 		setAmbientColor(.1f, .1f, .1f);
