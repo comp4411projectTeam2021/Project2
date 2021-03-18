@@ -40,6 +40,7 @@ ModelerView* createMyModel(int x, int y, int w, int h, char* label)
 // method of ModelerView to draw out MyModel
 void MyModel::draw()
 {
+	// init texture here
 	if (!init) {
 		init = true;
 		//testShader = new Shader("shader.vs", "shader.fs");
@@ -57,7 +58,7 @@ void MyModel::draw()
 
 		// 加载并生成纹理
 		int width, height, nrChannels;
-		unsigned char* data = stbi_load("鳞片.jpg", &width, &height, &nrChannels, 0);
+		unsigned char* data = stbi_load("texture1.jpg", &width, &height, &nrChannels, 0);
 		unsigned char* data2;
 		if (data)
 		{
@@ -85,14 +86,14 @@ void MyModel::draw()
 			stbi_image_free(data2);
 
 	}
-	//testShader->use();
-	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
 
 	// This call takes care of a lot of the nasty projection 
 	// matrix stuff.  Unless you want to fudge directly with the 
 	// projection matrix, don't bother with this ...
 	ModelerView::draw();
 	
+
 	if (FBXManager::getFbxManager()->loaded) {
 		FBXManager* fbxManager = FBXManager::getFbxManager();
 		fbxManager->drawSceneGL();
