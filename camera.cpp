@@ -1,7 +1,8 @@
 #include <windows.h>
 #include <Fl/gl.h>
 #include <gl/glu.h>
-
+#include "modelerglobals.h"
+#include "modelerapp.h"
 #include "camera.h"
 
 #pragma warning(push)
@@ -96,6 +97,9 @@ void Camera::calculateViewingTransformParameters()
 	else
 		mUpVector= Vec3f(0,1,0);
 
+	//mUpVector = Vec3f()
+	//	VAL(CAM_ANG);
+
 	mDirtyTransform = false;
 }
 
@@ -121,6 +125,8 @@ void Camera::clickMouse( MouseAction_t action, int x, int y )
 
 void Camera::dragMouse( int x, int y )
 {
+	
+	double tanVal = -(atan2(y - screenHeight/2, x - screenWidth/2) - atan2(mLastMousePosition[1] - screenHeight / 2, mLastMousePosition[0] - screenWidth / 2));
 	Vec3f mouseDelta   = Vec3f(x,y,0.0f) - mLastMousePosition;
 	mLastMousePosition = Vec3f(x,y,0.0f);
 
@@ -158,8 +164,12 @@ void Camera::dragMouse( int x, int y )
 			setDolly(getDolly() + dDolly);
 			break;
 		}
-	case kActionTwist:
+	case kActionTwist: {
 		// Not implemented
+		printf("%f \n", ModelerApplication::Instance()->GetControlValue(CAM_ANG));
+		ModelerApplication::Instance()->SetControlValue(CAM_ANG, ModelerApplication::Instance()->GetControlValue(CAM_ANG)+ (tanVal * 180 / M_PI));
+	}
+
 	default:
 		break;
 	}
@@ -210,6 +220,10 @@ void Camera::lookAt(Vec3f eye, Vec3f at, Vec3f up)
 	glRotatef(upDownAngle + (up[1] > 0 ? 0 : 180), 1 * up[1],0, 0);
 
 
+
+
+
+
 	//printf("up to +y: %f \n", toprotateangle);
 
 
@@ -227,6 +241,7 @@ void Camera::lookAt(Vec3f eye, Vec3f at, Vec3f up)
 
 	//printf("U/D: %f\n", toprotateangle);
 	//printf("L/R: %f \n\n", verticalrotasteangle);
+	glRotatef(VAL(CAM_ANG), 0, 0, 1);
 
 }
 

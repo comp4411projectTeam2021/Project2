@@ -30,6 +30,7 @@ protected:
     Vec3f			mLastMousePosition;
     MouseAction_t	mCurrentMouseAction;
     
+
     
 public:
     
@@ -83,6 +84,9 @@ public:
 
 	// gluLookAt equivalent
 	void lookAt(Vec3f eye, Vec3f at, Vec3f up);
+
+    float screenWidth = 0;
+    float screenHeight = 0;
 };
 
 #endif

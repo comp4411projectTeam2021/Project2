@@ -21,7 +21,6 @@ ModelerView::ModelerView(int x, int y, int w, int h, char *label)
 : Fl_Gl_Window(x,y,w,h,label)
 {
     m_camera = new Camera();
-
 }
 
 ModelerView::~ModelerView()
@@ -30,6 +29,10 @@ ModelerView::~ModelerView()
 }
 int ModelerView::handle(int event)
 {
+	m_camera->screenWidth = w();
+	m_camera->screenHeight = h();
+
+	
 
 #ifndef __APPLE__
 	static int first = 1;
@@ -44,23 +47,35 @@ int ModelerView::handle(int event)
 	unsigned eventCoordY = Fl::event_y();
 	unsigned eventButton = Fl::event_button();
 	unsigned eventState  = Fl::event_state();
-
+	/*printf((isLMB ?  "true,":"false,"));
+	printf((isRMB ? "true\n" : "false\n"));*/
 	switch(event)	 
 	{
 	case FL_PUSH:
 		{
-			switch(eventButton)
-			{
-			case kMouseRotationButton:
-				m_camera->clickMouse(kActionRotate, eventCoordX, eventCoordY );
-				break;
-			case kMouseTranslationButton:
-				m_camera->clickMouse(kActionTranslate, eventCoordX, eventCoordY );
-				break;
-			case kMouseZoomButton:
-				m_camera->clickMouse(kActionZoom, eventCoordX, eventCoordY );
-				break;
-			}
+
+				switch(eventButton)
+				{
+				case kMouseRotationButton:
+					m_camera->clickMouse(kActionRotate, eventCoordX, eventCoordY );
+					isLMB = true;
+					break;
+				case kMouseTranslationButton:
+					m_camera->clickMouse(kActionTranslate, eventCoordX, eventCoordY );
+					break;
+				case kMouseZoomButton:
+					m_camera->clickMouse(kActionZoom, eventCoordX, eventCoordY );
+					isRMB = true;
+					break;
+	
+				}
+				if (isRMB && isLMB) {
+
+					m_camera->clickMouse(kActionTwist, eventCoordX, eventCoordY);
+
+
+				}
+
            // printf("push %d %d\n", eventCoordX, eventCoordY);
 		}
 		break;
@@ -75,9 +90,16 @@ int ModelerView::handle(int event)
 			switch(eventButton)
 			{
 			case kMouseRotationButton:
+				m_camera->releaseMouse(eventCoordX, eventCoordY);
+				isLMB = false;
+				break;
 			case kMouseTranslationButton:
+				m_camera->releaseMouse(eventCoordX, eventCoordY);
+
+				break;
 			case kMouseZoomButton:
 				m_camera->releaseMouse(eventCoordX, eventCoordY );
+				isRMB = false;
 				break;
 			}
           //  printf("release %d %d\n", eventCoordX, eventCoordY);

@@ -1,6 +1,6 @@
 [B]Change the default light
 [W]Texture on model(support multiple textures)
-
+[BW] handle camera twists (Hold LMB + RMB,rotate with respect to the center of the window )
 
 
 Additional feature:
@@ -9,4 +9,4 @@ Implemented support for loading .FBX standar model file. Can be access via butto
 Allow whole model move in xyz
 *Moddel should contains polygon with with 3/4 edges*
 
-Total 1.5
+Total: 3

@@ -440,6 +440,7 @@ int main()
 	controls[LIGHT_X] = ModelerControl("light X", -100, 100, 1, 0);
 	controls[LIGHT_Y] = ModelerControl("light Y", -100, 100, 1, 0);
 	controls[LIGHT_Z] = ModelerControl("light Z", -100, 100, 1, 0);
+	controls[CAM_ANG] = ModelerControl("Camera angle", -180, 180, 1, 0);
 	ModelerApplication::Instance()->Init(&createMyModel, controls, NUMCONTROLS);
 	return ModelerApplication::Instance()->Run();
 }
