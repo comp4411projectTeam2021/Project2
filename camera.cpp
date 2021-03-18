@@ -4,6 +4,7 @@
 #include "modelerglobals.h"
 #include "modelerapp.h"
 #include "camera.h"
+#include "sizeRecorder.h"
 
 #pragma warning(push)
 #pragma warning(disable : 4244)
@@ -192,6 +193,10 @@ void Camera::applyViewingTransform() {
 				mLookAt[0],   mLookAt[1],   mLookAt[2],
 				mUpVector[0], mUpVector[1], mUpVector[2]);*/
 
+	double* temp = SizeRecorder::getInstance()->minCoord;
+
+	printf("%f, %f, %f \n", temp[0], temp[1], temp[2]);
+
 	lookAt(mPosition, mLookAt, mUpVector);
 	/*printf("UP: %f %f %f \n", mUpVector[0], mUpVector[1], mUpVector[2]);
 	printf("AT: %f %f %f \n", mLookAt[0], mLookAt[1], mLookAt[2]);
@@ -212,6 +217,7 @@ void Camera::lookAt(Vec3f eye, Vec3f at, Vec3f up)
 	atNoy.normalize();
 
 
+	glRotatef(VAL(CAM_ANG), 0, 0, 1);
 
 	//up back to +y
 
@@ -241,7 +247,6 @@ void Camera::lookAt(Vec3f eye, Vec3f at, Vec3f up)
 
 	//printf("U/D: %f\n", toprotateangle);
 	//printf("L/R: %f \n\n", verticalrotasteangle);
-	glRotatef(VAL(CAM_ANG), 0, 0, 1);
 
 }
 
