@@ -5,6 +5,7 @@
 #include "modelerapp.h"
 #include "modelerdraw.h"
 #include "FBXManager.h"
+#include "modelerui.h"
 
 #include "modelerglobals.h"
 //#include "Shader.h"
@@ -13,6 +14,18 @@
 #include "stb_image.h"
 #include <FL/gl.h>
 #include <vector>
+#include <iostream>
+
+int aniCount = 0;
+const int aniMax = 100;
+int moodCount = 0;
+const int moodMax = 200;
+bool moodType = true;
+bool ANI = false;
+double range8 = 0, range15 = 0, range12 = 0;
+double CountD = aniCount;
+double maxD = aniMax;
+int preMood = 0;
 
 // To make a MyModel, we inherit off of ModelerView
 class MyModel : public ModelerView
@@ -99,7 +112,16 @@ void MyModel::draw()
 		fbxManager->drawSceneGL();
 	}
 	else {
+		//std::cout << ModelerUserInterface::m_controlsAnimOnMenu->value() << std::endl;
+		//std::cout << ModelerUserInterface::menu_m_controlsMenuBar->value() << std::endl;
+		if (ModelerUserInterface::m_controlsAnimOnMenu->value()==0)ANI = false;
+		else ANI = true;
 
+		if (!ANI)
+		{
+			aniCount = 0;
+		}
+		
 		// draw the floor
 		setAmbientColor(.1f, .1f, .1f);
 		setDiffuseColor(COLOR_RED);
@@ -162,24 +184,39 @@ void MyModel::draw()
 		setDiffuseColor(.4f, 0, .2f);
 
 		glPushMatrix();
-		glTranslated(VAL(XPOS), VAL(YPOS), VAL(ZPOS));
+		if (!ANI)
+			glTranslated(VAL(XPOS), VAL(YPOS), VAL(ZPOS));
+		else
+			moodType? glTranslated(VAL(XPOS), VAL(YPOS), range15/50): glTranslated(VAL(XPOS), range15/100, VAL(ZPOS));
 
 		glPushMatrix();
-		glRotated(VAL(FRONT_BODY), 0.0, 1.0, 0.0);
+		if (!ANI)
+			glRotated(VAL(FRONT_BODY), 0.0, 1.0, 0.0);
+		else
+			moodType ? glRotated(range8, 0.0, 1.0, 0.0) : glRotated(0, 0.0, 1.0, 0.0);
 		glTranslated(-1, 0, .1);
 		drawTextureBox(2, 1.2, 1);
 		glTranslated(0.4, 0.1, 1);
 		drawTextureBox(1.2, 1, 0.8);
 		glPushMatrix();
 		glTranslated(-.4, -.4, -.8);//2.9 -1.7
-		glRotated(-80 + VAL(LEG_RIGHT1), 0.0, 1.0, 0.0);
+		//glRotated(-80 + VAL(LEG_RIGHT1), 0.0, 1.0, 0.0);
+		if (!ANI)
+			glRotated(-80 + VAL(LEG_RIGHT1), 0.0, 1.0, 0.0);
+		else
+			//glRotated(-80 - range15, 0.0, 1.0, 0.0);
+			moodType ? glRotated(-80 - range15, 0.0, 1.0, 0.0) : glRotated(-80 + range15, 0.0, 1.0, 0.0);
 		glRotated(30, 1.0, 0.0, 0.0);
 		drawTextureBox(.3, .3, 1.5);
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslated(1.6, -.4, -.8);
-		glRotated(80 + VAL(LEG_LEFT1), 0.0, 1.0, 0.0);
+		//glRotated(80 + VAL(LEG_LEFT1), 0.0, 1.0, 0.0);
+		if (!ANI)
+			glRotated(80 + VAL(LEG_LEFT1), 0.0, 1.0, 0.0);
+		else
+			glRotated(80 + range15, 0.0, 1.0, 0.0);
 		glRotated(30, 1.0, 0.0, 0.0);
 		drawTextureBox(-.3, .3, 1.5);
 		glPopMatrix();
@@ -187,13 +224,25 @@ void MyModel::draw()
 
 			glPushMatrix();
 			glTranslated(1.8, .4, -.4);
-			glRotated(75 + VAL(ARM_LEFT2_1), 0.0, 1.0, 0.0);
-			glRotated(VAL(ARM_LEFT2_2), 1.0, 0.0, 0.0);
+			//glRotated(75 + VAL(ARM_LEFT2_1), 0.0, 1.0, 0.0);
+			if (!ANI)
+				glRotated(75 + VAL(ARM_LEFT2_1), 0.0, 1.0, 0.0);
+			else
+				glRotated(75 + range15, 0.0, 1.0, 0.0);
+			//glRotated(VAL(ARM_LEFT2_2), 1.0, 0.0, 0.0);
+			if (!ANI)
+				glRotated(VAL(ARM_LEFT2_2), 1.0, 0.0, 0.0);
+			else
+				glRotated(range8, 1.0, 0.0, 0.0);
 			glRotated(10, 1.0, 0.0, 0.0);
 			drawTextureBox(-.3, .3, 1.4);
 				glPushMatrix();
 				glTranslated(-.2, .15, 1.2);
-				glRotated(-90 + VAL(ARM_LEFT1), 0.0, 1.0, 0.0);
+				//glRotated(-90 + VAL(ARM_LEFT1), 0.0, 1.0, 0.0);
+				if (!ANI)
+					glRotated(-90 + VAL(ARM_LEFT1), 0.0, 1.0, 0.0);
+				else
+					glRotated(-90 + range15, 0.0, 1.0, 0.0);
 				drawCylinder(1.5, 0.15, 0.15);
 					glPushMatrix();
 					glTranslated(0, 0, 1.4);
@@ -212,7 +261,11 @@ void MyModel::draw()
 					glPopMatrix();
 					glPushMatrix();
 					glTranslated(-0.1, 0, 1.6);
-					glRotated(-10 + VAL(JAW_LEFT), 0.0, 1.0, 0.0);
+					//glRotated(-10 + VAL(JAW_LEFT), 0.0, 1.0, 0.0);
+					if (!ANI)
+						glRotated(-10 + VAL(JAW_LEFT), 0.0, 1.0, 0.0);
+					else
+						glRotated(-10 + range12, 0.0, 1.0, 0.0);
 					drawCylinder(.9, 0.1, 0.06);
 						glPushMatrix();
 						glTranslated(0, 0, .9);
@@ -225,13 +278,25 @@ void MyModel::draw()
 
 			glPushMatrix();
 			glTranslated(-0.6, .4, -.4);
-			glRotated(-75 + VAL(ARM_RIGHT2_1), 0.0, 1.0, 0.0);
-			glRotated(VAL(ARM_RIGHT2_2), 1.0, 0.0, 0.0);
+			//glRotated(-75 + VAL(ARM_RIGHT2_1), 0.0, 1.0, 0.0);
+			if (!ANI)
+				glRotated(-75 + VAL(ARM_RIGHT2_1), 0.0, 1.0, 0.0);
+			else
+				moodType ? glRotated(-75 + range15, 0.0, 1.0, 0.0) : glRotated(-75 - range15, 0.0, 1.0, 0.0);
+			//glRotated(VAL(ARM_RIGHT2_2), 1.0, 0.0, 0.0);
+			if (!ANI)
+				glRotated(VAL(ARM_RIGHT2_2), 1.0, 0.0, 0.0);
+			else
+				glRotated(range8, 1.0, 0.0, 0.0);
 			glRotated(10, 1.0, 0.0, 0.0);
 			drawTextureBox(.3, .3, 1.4);
 				glPushMatrix();
 				glTranslated(.2, .15, 1.2);
-				glRotated(90 + VAL(ARM_RIGHT1), 0.0, 1.0, 0.0);
+				//glRotated(90 + VAL(ARM_RIGHT1), 0.0, 1.0, 0.0);
+				if (!ANI)
+					glRotated(90 + VAL(ARM_RIGHT1), 0.0, 1.0, 0.0);
+				else
+					moodType ? glRotated(90 + range15, 0.0, 1.0, 0.0) : glRotated(90 - range15, 0.0, 1.0, 0.0);
 				drawCylinder(1.5, 0.15, 0.15);
 					glPushMatrix();
 					glTranslated(0, 0, 1.5);
@@ -250,7 +315,11 @@ void MyModel::draw()
 					glPopMatrix();
 					glPushMatrix();
 					glTranslated(0.1, 0, 1.6);
-					glRotated(10 + VAL(JAW_RIGHT), 0.0, 1.0, 0.0);
+					//glRotated(10 + VAL(JAW_RIGHT), 0.0, 1.0, 0.0);
+					if (!ANI)
+						glRotated(10 + VAL(JAW_RIGHT), 0.0, 1.0, 0.0);
+					else
+						glRotated(10 - range12, 0.0, 1.0, 0.0);
 					drawCylinder(.9, 0.1, 0.06);
 						glPushMatrix();
 						glTranslated(0, 0, .9);
@@ -261,119 +330,108 @@ void MyModel::draw()
 				glPopMatrix();
 			glPopMatrix();
 		glPopMatrix();
-		
-		/*glPushMatrix();
-		glPopMatrix();*/
-		/*
-		glPushMatrix();
-		glTranslated(1.8, .4, -.4);
-		glRotated(75 + VAL(ARM_LEFT2_1), 0.0, 1.0, 0.0);
-		glRotated(VAL(ARM_LEFT2_2), 1.0, 0.0, 0.0);
-		glRotated(10, 1.0, 0.0, 0.0);
-		drawBox(-.3, .3, 1.4);
-		glPushMatrix();
-		glTranslated(-.2, .15, 1.2);
-		glRotated(-90 + VAL(ARM_LEFT1), 0.0, 1.0, 0.0);
-		drawCylinder(1.5, 0.15, 0.15);
-		glPushMatrix();
-		glTranslated(0, 0, 1.4);
-		glRotated(30, 0.0, 1.0, 0.0);
-		drawCylinder(0.8, 0.15, 0.1);
-		glPopMatrix();
-		glPushMatrix();
-		glTranslated(-0.1, 0, 1.6);
-		glRotated(-10 + VAL(JAW_LEFT), 0.0, 1.0, 0.0);
-		drawCylinder(1.1, 0.1, 0.05);
-		glPopMatrix();
-		glPopMatrix();
-		glPopMatrix();
 
 		glPushMatrix();
-		glTranslated(-0.6, .4, -.4);
-		glRotated(-75 + VAL(ARM_RIGHT2_1), 0.0, 1.0, 0.0);
-		glRotated(VAL(ARM_RIGHT2_2), 1.0, 0.0, 0.0);
-		glRotated(10, 1.0, 0.0, 0.0);
-		drawBox(.3, .3, 1.4);
-		glPushMatrix();
-		glTranslated(.2, .15, 1.2);
-		glRotated(90 + VAL(ARM_RIGHT1), 0.0, 1.0, 0.0);
-		drawCylinder(1.5, 0.15, 0.15);
-		glPopMatrix();
-		glPopMatrix();
-		glPopMatrix();
-*/
-
-
-
-		glPushMatrix();
-		glRotated(VAL(BACK_BODY), 0.0, 1.0, 0.0);
+		//glRotated(VAL(BACK_BODY), 0.0, 1.0, 0.0);
+		if (!ANI)
+			glRotated(VAL(BACK_BODY), 0.0, 1.0, 0.0);
+		else
+			moodType ? glRotated(-range8, 0.0, 1.0, 0.0) : glRotated(0, 0.0, 1.0, 0.0);
 		glTranslated(-1, 0, -1.1);
 		drawTextureBox(2, 1.2, 1);
 		glTranslated(0.4, 0.1, -.8);
 		drawTextureBox(1.2, 1, 0.8);
 			glPushMatrix();
 			glTranslated(1.5, -.4, .7);
-			glRotated(-45 + VAL(LEG_LEFT3), 0.0, 1.0, 0.0);
+			//glRotated(-45 + VAL(LEG_LEFT3), 0.0, 1.0, 0.0);
+			if (!ANI)
+				glRotated(-45 + VAL(LEG_LEFT3), 0.0, 1.0, 0.0);
+			else
+				glRotated(-45 - range15, 0.0, 1.0, 0.0);
 			glRotated(-30, 1.0, 0.0, 0.0);
 			drawTextureBox(.3, .3, -1.5);
 			glPopMatrix();
 
 			glPushMatrix();
 			glTranslated(-.3, -.4, .7);
-			glRotated(45 + VAL(LEG_RIGHT3), 0.0, 1.0, 0.0);
+			//glRotated(45 + VAL(LEG_RIGHT3), 0.0, 1.0, 0.0);
+			if (!ANI)
+				glRotated(45 + VAL(LEG_RIGHT3), 0.0, 1.0, 0.0);
+			else
+				//glRotated(45 + range15, 0.0, 1.0, 0.0);
+				moodType ? glRotated(45 + range15, 0.0, 1.0, 0.0) : glRotated(45 - range15, 0.0, 1.0, 0.0);
 			glRotated(-30, 1.0, 0.0, 0.0);
 			drawTextureBox(-.3, .3, -1.5);
 			glPopMatrix();
 
 			glPushMatrix();
 			glTranslated(1.6, -.4, 1.4);
-			glRotated(-80 + VAL(LEG_LEFT2), 0.0, 1.0, 0.0);
+			//glRotated(-80 + VAL(LEG_LEFT2), 0.0, 1.0, 0.0);
+			if (!ANI)
+				glRotated(-80 + VAL(LEG_LEFT2), 0.0, 1.0, 0.0);
+			else
+				glRotated(-80 + range15, 0.0, 1.0, 0.0);
 			glRotated(-30, 1.0, 0.0, 0.0);
 			drawTextureBox(.3, .3, -1.5);
 			glPopMatrix();
 
 			glPushMatrix();
 			glTranslated(-.4, -.4, 1.4);
-			glRotated(80 + VAL(LEG_RIGHT2), 0.0, 1.0, 0.0);
+			//glRotated(80 + VAL(LEG_RIGHT2), 0.0, 1.0, 0.0);
+			if (!ANI)
+				glRotated(80 + VAL(LEG_RIGHT2), 0.0, 1.0, 0.0);
+			else
+				//glRotated(80 - range15, 0.0, 1.0, 0.0);
+				moodType ? glRotated(80 - range15, 0.0, 1.0, 0.0) : glRotated(80 + range15, 0.0, 1.0, 0.0);
 			glRotated(-30, 1.0, 0.0, 0.0);
 			drawTextureBox(-.3, .3, -1.5);
 			glPopMatrix();
 		
-		/*
+		
 			glPushMatrix();
-			glTranslated(-1.5, 0, -2);
-			glScaled(3, 1, 4);
-			drawBox(1, 1, 1);
-			glPopMatrix();
-
-			// draw cannon
-			glPushMatrix();
-			glTranslated(-.4, -.4, 1.4);
-			glRotated(80 + VAL(LEG_RIGHT2), 0.0, 1.0, 0.0);
-			glRotated(-30, 1.0, 0.0, 0.0);
-			drawBox(-.3, .3, -1.5);
-			glPopMatrix();
-*/
-			glPushMatrix();
-			glRotated(30 + VAL(TAIL1), 1.0, 0.0, 0.0);
+			//glRotated(30 + VAL(TAIL1), 1.0, 0.0, 0.0);
+			if (!ANI)
+				glRotated(30 + VAL(TAIL1), 1.0, 0.0, 0.0);
+			else
+				moodType ? glRotated(30 + range15, 1.0, 0.0, 0.0) : glRotated(30 - range15, 1.0, 0.0, 0.0);
 			glTranslated(0.3, 0.1, 0);
 			drawTextureBox(.6, .6, -1.2);
 				glPushMatrix();
 				glTranslated(.05, 0.06, -1.2);
-				glRotated(30 + VAL(TAIL2), 1.0, 0.0, 0.0);
+				//glRotated(30 + VAL(TAIL2), 1.0, 0.0, 0.0);
+				if (!ANI)
+					glRotated(30 + VAL(TAIL2), 1.0, 0.0, 0.0);
+				else
+					moodType ? glRotated(30 + range15, 1.0, 0.0, 0.0) : glRotated(30 - range15, 1.0, 0.0, 0.0);
 				drawTextureBox(.5, .5, -1.2);
 					glPushMatrix();
 					glTranslated(.05, 0.06, -1.2);
-					glRotated(30 + VAL(TAIL3), 1.0, 0.0, 0.0);
+					//glRotated(30 + VAL(TAIL3), 1.0, 0.0, 0.0);
+					if (!ANI)
+						glRotated(30 + VAL(TAIL3), 1.0, 0.0, 0.0);
+					else
+						moodType ? glRotated(30 + range15, 1.0, 0.0, 0.0) : glRotated(30 - range15, 1.0, 0.0, 0.0);
 					drawTextureBox(.4, .4, -1.2);
 						glPushMatrix();
 						glTranslated(.05, 0.06, -1.2);
-						glRotated(30 + VAL(TAIL4), 1.0, 0.0, 0.0);
+						//glRotated(30 + VAL(TAIL4), 1.0, 0.0, 0.0);
+						if (!ANI)
+							glRotated(30 + VAL(TAIL4), 1.0, 0.0, 0.0);
+						else
+							moodType ? glRotated(30 + range15, 1.0, 0.0, 0.0) : glRotated(30 - range15, 1.0, 0.0, 0.0);
 						drawTextureBox(.3, .3, -1);
 							glPushMatrix();
 							glTranslated(.15, .15, -.9);
-							glRotated(VAL(HOOK1), 0.0, 1.0, 0.0);
-							glRotated(180 + VAL(HOOK2), 1.0, 0.0, 0.0);
+							//glRotated(VAL(HOOK1), 0.0, 1.0, 0.0);
+							if (!ANI)
+								glRotated(VAL(HOOK1), 0.0, 1.0, 0.0);
+							else
+								glRotated(range15, 0.0, 1.0, 0.0);
+							//glRotated(180 + VAL(HOOK2), 1.0, 0.0, 0.0);
+							if (!ANI)
+								glRotated(180 + VAL(HOOK2), 1.0, 0.0, 0.0);
+							else
+								moodType ? glRotated(180 + range15, 1.0, 0.0, 0.0) : glRotated(180 - range15, 1.0, 0.0, 0.0);
 							drawCylinder(1, 0.1, 0.001);
 							glPopMatrix();
 						glPopMatrix();
@@ -401,6 +459,58 @@ void MyModel::draw()
 			*/
 
 		glPopMatrix();
+
+		//std::cout << range8 << std::endl;
+
+		if (ANI)
+		{
+			//std::cout << range8 << std::endl;
+			aniCount %= aniMax;
+			aniCount++;
+
+			if (VAL(MOOD) == 1)
+			{
+				if (preMood != VAL(MOOD))aniCount = 0;
+				moodCount++;
+				if (moodCount > aniMax && moodType)moodType = !moodType;
+				if (moodCount == moodMax)
+				{
+					moodType = true;
+					moodCount = 0;
+				}
+			}
+			else
+			{
+				if (preMood != VAL(MOOD))aniCount = 0;
+				moodType = true;
+				//aniCount = 0;
+			}
+
+			preMood = VAL(MOOD);
+
+			CountD = aniCount;
+
+			if (aniCount <= aniMax / 4)
+				range8 = 8 * CountD / (maxD / 4);
+			else if (aniCount <= aniMax * 3 / 4)
+				range8 = 8 - 16 * (CountD - maxD / 4) / (maxD / 2);
+			else
+				range8 = -8 + 8*(CountD - maxD * 3 / 4) / (maxD / 4);
+
+			if (aniCount <= aniMax / 4)
+				range15 = 15 * CountD / (maxD / 4);
+			else if (aniCount <= aniMax * 3 / 4)
+				range15 = 15 - 30 * (CountD - maxD / 4) / (maxD / 2);
+			else
+				range15 = -15 + 15 * (CountD - maxD * 3 / 4) / (maxD / 4);
+
+			if (aniCount <= aniMax / 4)
+				range12 = 12 * CountD / (maxD / 4);
+			else if (aniCount <= aniMax * 3 / 4)
+				range12 = 12 - 24 * (CountD - maxD / 4) / (maxD / 2);
+			else
+				range12 = -12 + 12 * (CountD - maxD * 3 / 4) / (maxD / 4);
+		}
 	}
 }
 
@@ -431,12 +541,14 @@ int main()
 	controls[ARM_RIGHT2_2] = ModelerControl("Right Arm-2 Angle-2", -8, 8, 0.1f, 0);
 	controls[JAW_LEFT] = ModelerControl("Left Jaw Angle", -12, 12, 0.1f, 0);
 	controls[JAW_RIGHT] = ModelerControl("Right Jaw Angle", -12, 12, 0.1f, 0);
-	controls[TAIL1] = ModelerControl("Tail-1 Angle", -15, 20, 0.1f, 0);
-	controls[TAIL2] = ModelerControl("Tail-2 Angle", -15, 20, 0.1f, 0);
-	controls[TAIL3] = ModelerControl("Tail-3 Angle", -15, 20, 0.1f, 0);
-	controls[TAIL4] = ModelerControl("Tail-4 Angle", -15, 29, 0.1f, 0);
+	controls[TAIL1] = ModelerControl("Tail-1 Angle", -15, 15, 0.1f, 0);
+	controls[TAIL2] = ModelerControl("Tail-2 Angle", -15, 15, 0.1f, 0);
+	controls[TAIL3] = ModelerControl("Tail-3 Angle", -15, 15, 0.1f, 0);
+	controls[TAIL4] = ModelerControl("Tail-4 Angle", -15, 15, 0.1f, 0);
 	controls[HOOK1] = ModelerControl("Hook Angle-1", -15, 15, 0.1f, 0);
-	controls[HOOK2] = ModelerControl("Hook Angle-2", -15, 20, 0.1f, 0);
+	controls[HOOK2] = ModelerControl("Hook Angle-2", -15, 15, 0.1f, 0);
+	controls[MOOD] = ModelerControl("Open Mood", 0, 1, 1, 0);
+
 
 	controls[LIGHT_X] = ModelerControl("light X", -100, 100, 1, 0);
 	controls[LIGHT_Y] = ModelerControl("light Y", -100, 100, 1, 0);
