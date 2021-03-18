@@ -57,7 +57,9 @@ private:
   static void cb_Poor(Fl_Menu_*, void*);
 private:
   inline void cb_Focus_i(Fl_Menu_*, void*);
+  inline void cb_cb_FrameALL_i(Fl_Menu_*, void*);
   static void cb_Focus(Fl_Menu_*, void*);
+  static void cb_FrameALL(Fl_Menu_* o, void* v);
 public:
   static Fl_Menu_Item *m_controlsAnimOnMenu;
 private:

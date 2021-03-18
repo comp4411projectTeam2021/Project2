@@ -67,6 +67,9 @@ public:
     
     inline void setLookAt( const Vec3f &lookAt )
     { mLookAt = lookAt; mDirtyTransform = true;}
+
+    inline void setPos( const Vec3f &Pos )
+    { mPosition = Pos; mDirtyTransform = true;}
     inline Vec3f getLookAt() const
     { return mLookAt; }
     

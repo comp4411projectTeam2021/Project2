@@ -1,5 +1,6 @@
-[B]Change the default light
-[W]Texture on model(support multiple textures)
+[W]Change the default light
+[B]Texture on model(support multiple textures)
+[B]Frame All
 [BW] handle camera twists (Hold LMB + RMB,rotate with respect to the center of the window )
 
 
@@ -7,6 +8,9 @@ Additional feature:
 
 Implemented support for loading .FBX standar model file. Can be access via button under "File". 
 Allow whole model move in xyz
+
+Probably also satisfy "[B] using the 'triangle' primitive to render them." ?
+
 *Moddel should contains polygon with with 3/4 edges*
 
-Total: 3
+Total: 4 + 1

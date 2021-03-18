@@ -6,6 +6,7 @@
 #include <GL/glu.h>
 #include <cstdio>
 #include <math.h>
+#include "sizeRecorder.h"
 
 //#include "Shader.h"
 
@@ -201,6 +202,7 @@ void closeRayFile()
 
 void drawSphere(double r)
 {
+    SizeRecorder::getInstance()->record();
     ModelerDrawState *mds = ModelerDrawState::Instance();
 
 	_setupOpenGl();
@@ -240,6 +242,8 @@ void drawSphere(double r)
 
 void drawBox( double x, double y, double z )
 {
+    SizeRecorder::getInstance()->record();
+
     ModelerDrawState *mds = ModelerDrawState::Instance();
 
 	_setupOpenGl();
@@ -304,6 +308,8 @@ void drawTextureBox( double x, double y, double z )
 {
     // NOT IMPLEMENTED, SORRY (ehsu)
 
+    SizeRecorder::getInstance()->record();
+
     int savemode;
     glGetIntegerv(GL_MATRIX_MODE, &savemode);
 
@@ -347,11 +353,12 @@ void drawTextureBox( double x, double y, double z )
     mode we were in. */
     glPopMatrix();
     glMatrixMode(savemode);
-    //https ://blog.csdn.net/xufan123123/article/details/72456243
 }
 
 void drawCylinder( double h, double r1, double r2 )
 {
+    SizeRecorder::getInstance()->record();
+
     ModelerDrawState *mds = ModelerDrawState::Instance();
     int divisions;
 
@@ -434,6 +441,8 @@ void drawTriangle( double x1, double y1, double z1,
                    double x2, double y2, double z2,
                    double x3, double y3, double z3 )
 {
+    SizeRecorder::getInstance()->record();
+
     ModelerDrawState *mds = ModelerDrawState::Instance();
 
 	_setupOpenGl();
