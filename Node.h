@@ -21,6 +21,7 @@ public:
 
 private:
 	int depth = 0;
+	float leavesRot = 0;
 	Node(Node* parent);
 };
 

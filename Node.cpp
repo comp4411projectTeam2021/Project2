@@ -5,6 +5,7 @@ static int maxDepth = 10;
 
 std::default_random_engine generator;
 std::uniform_real<float> distribution(0.7, 1.3);
+std::uniform_real<float> distribution2(0, 360);
 
 static std::vector<GLuint*>* textures;
 
@@ -28,15 +29,22 @@ void Node::drawTree(Node* root)
     glRotated(root->rotate[1], 0, 1, 0);
     glRotated(root->rotate[2], 0, 0, 1);
     //if(root->parent == nullptr)
+
     //make it rotate w.r.t center of box
     glTranslated(-root->scale[0]/2,0,-root->scale[2]/2);
 
     //glScaled(root->scale[0], root->scale[1], root->scale[2]);
-    //drawleaves(root->scale[0], root->scale[1], root->scale[2],(*textures)[2]);
-    setDiffuseColor(1, 1, 1);
+    //
+    setDiffuseColor(155 / 255.0, 115 / 255.0, 58 / 255.0);
+    glBindTexture(GL_TEXTURE_2D, *(*textures)[0]);
     drawBox(root->scale[0], root->scale[1], root->scale[2]);
     for (Node* child : root->childrens) {
         drawTree(child);
+    }
+    if (root->childrens.size() == 0) {
+        glTranslated(-root->scale[0], root->scale[1] + 0.01,- root->scale[2]);
+        glRotated(root->leavesRot, 0, 1, 0);
+        drawleaves(1, 1, 1,(*textures)[2]);
     }
     glPopMatrix();
 }
@@ -69,6 +77,9 @@ Node::Node(Node* parent = nullptr) {
             nodeList.push_back(tempChild);
             this->childrens.push_back(tempChild);
         }
+    }
+    else {
+        leavesRot = distribution2(generator);
     }
     nodeList.push_back(this);
 }

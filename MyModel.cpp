@@ -62,10 +62,10 @@ void MyModel::draw()
 		init = true;
 		//testShader = new Shader("shader.vs", "shader.fs");
 		glEnable(GL_TEXTURE_2D);
-
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.9);//0.5可以换成任何在0~1之间的数 
 		
 		// 为当前绑定的纹理对象设置环绕、过滤方式
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
@@ -112,7 +112,7 @@ void MyModel::draw()
 			stbi_image_free(data);
 			stbi_image_free(data2);
 			stbi_image_free(data3);
-
+			glBindTexture(GL_TEXTURE_2D, *texture[0]);
 	}
 
 

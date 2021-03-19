@@ -13,6 +13,7 @@ SizeRecorder* SizeRecorder::getInstance()
 
 void SizeRecorder::record()
 {
+    return;
     glRotated(10,1,0,0);
     float mat[16];
     glGetFloatv(GL_MODELVIEW_MATRIX, mat);
