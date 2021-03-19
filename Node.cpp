@@ -3,7 +3,9 @@
 static vector<Node*> nodeList;
 static int maxDepth = 10;
 
+
 std::default_random_engine generator;
+
 std::uniform_real<float> distribution(0.7, 1.3);
 std::uniform_real<float> distribution2(0, 360);
 
@@ -16,7 +18,7 @@ void Node::setTexture(std::vector<GLuint*>* tex) {
 Node* Node::generateTree(int Depth)
 {
     maxDepth = Depth;
-
+    generator.seed(time(NULL));
     Node* root = new Node(nullptr);
     return root;
 }
@@ -42,8 +44,9 @@ void Node::drawTree(Node* root)
         drawTree(child);
     }
     if (root->childrens.size() == 0) {
-        glTranslated(-root->scale[0], root->scale[1] + 0.01,- root->scale[2]);
         glRotated(root->leavesRot, 0, 1, 0);
+
+        glTranslated(-root->scale[0]*1.8, root->scale[1] + 0.01,- root->scale[2]*1.5);
         drawleaves(1, 1, 1,(*textures)[2]);
     }
     glPopMatrix();
