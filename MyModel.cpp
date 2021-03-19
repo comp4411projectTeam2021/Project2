@@ -1,5 +1,26 @@
+
+
+// The sample model.  You should build a file
+// very similar to this for when you make your model.
+#include <gl/glew.h>
+#include <math.h>
+#include "modelerview.h"
+#include "modelerapp.h"
+#include "modelerdraw.h"
+#include "FBXManager.h"
+#include "modelerui.h"
+
+#include "modelerglobals.h"
+//#include "Shader.h"
+
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include <FL/gl.h>
+#include <vector>
+#include <iostream>
+
+
 
 #include "MyModel.h"
 
@@ -98,11 +119,46 @@ void MyModel::draw()
 		FBXManager* fbxManager = FBXManager::getFbxManager();
 		fbxManager->drawSceneGL();
 	}
+
+	else if (VAL(TORUS) == 1)
+	{
+		double preTheta = 0, preCos = 1.0, preSin = 0.0;
+		double faceTheta, length;
+
+		setAmbientColor(.1f, .1f, .1f);
+		setDiffuseColor(1,1,1);
+
+		for (int i = 0; i < VAL(SECTIONS); i++)
+		{
+			double nowTheta = preTheta + 2.0 * M_PI / VAL(SECTIONS);
+			glBegin(GL_QUAD_STRIP);
+			faceTheta = 0;
+			for (int j = 0; j <= VAL(FACES); j++)
+			{
+				faceTheta += 2.0 * M_PI / VAL(FACES);
+				length = VAL(RADIUS) + VAL(RADIUS_D) * cos(faceTheta);
+
+				glNormal3d(preCos * cos(faceTheta), preSin * cos(faceTheta), sin(faceTheta));
+				glVertex3d(preCos * length, preSin * length, VAL(RADIUS_D) * sin(faceTheta));
+
+				glNormal3d(cos(nowTheta) * cos(faceTheta), sin(nowTheta) * cos(faceTheta), sin(faceTheta));
+				glVertex3d(cos(nowTheta) * length, sin(nowTheta) * length, VAL(RADIUS_D)* sin(faceTheta));
+			}
+			glEnd();
+			preTheta = nowTheta;
+			preCos = cos(nowTheta);
+			preSin = sin(nowTheta);
+		}
+	}
+
+
+
 	else {
 		//std::cout << ModelerUserInterface::m_controlsAnimOnMenu->value() << std::endl;
 		//std::cout << ModelerUserInterface::menu_m_controlsMenuBar->value() << std::endl;
 		if (ModelerUserInterface::m_controlsAnimOnMenu->value()==0)ANI = false;
 		else ANI = true;
+
 
 		if (!ANI)
 		{
@@ -535,7 +591,11 @@ int main()
 	controls[HOOK1] = ModelerControl("Hook Angle-1", -15, 15, 0.1f, 0);
 	controls[HOOK2] = ModelerControl("Hook Angle-2", -15, 15, 0.1f, 0);
 	controls[MOOD] = ModelerControl("Open Mood", 0, 1, 1, 0);
-
+	controls[TORUS] = ModelerControl("Draw Torus", 0, 1, 1, 0);
+	controls[RADIUS] = ModelerControl("Torus Radius", 0, 10, 0.1f, 3);
+	controls[RADIUS_D] = ModelerControl("Torus Radius Thick", 0, 3, 0.1f, 1);
+	controls[FACES] = ModelerControl("Torus Faces", 3, 16, 1, 8);
+	controls[SECTIONS] = ModelerControl("Torus Sections", 3, 32, 1, 16);
 
 	controls[LIGHT_X] = ModelerControl("light X", -100, 100, 1, 0);
 	controls[LIGHT_Y] = ModelerControl("light Y", -100, 100, 1, 0);

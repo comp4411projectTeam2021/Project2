@@ -1,6 +1,15 @@
 #include "Node.h"
+
 #include <ctime>
 #define VAL(x) (uiObj->x->value())
+
+
+#include <time.h>
+
+#include <ctime>
+
+
+
 static vector<Node*> nodeList;
 static int maxDepth = 10;
 static ModelerUserInterface* uiObj;
@@ -29,7 +38,11 @@ Node* Node::generateTree(int Depth)
         nodeList.clear();
     }
 
+
     maxDepth = uiObj->m_depthSlider->value();
+
+    maxDepth = Depth;
+
     generator.seed(std::time(NULL));
     Node* root = new Node(nullptr);
     return root;
@@ -133,11 +146,14 @@ Node::Node(Node* parent = nullptr) {
 
     if (depth <= maxDepth) {
         for (int i = 0; i < uiObj->m_nSubTreeMax; i++) {
+
             if (VAL(m_RandomCheckbox) && i > VAL(m_SubTreeMinSlider)) {
                 if (distribution(generator) > 1.0) {
                     continue;
                 }
             }
+
+
             Node* tempChild = new Node(this);
             nodeList.push_back(tempChild);
             this->childrens.push_back(tempChild);

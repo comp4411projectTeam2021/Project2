@@ -291,7 +291,11 @@ Fl_Menu_Item ModelerUserInterface::menu_m_controlsMenuBar[] = {
 };
 // 11-01-2001: fixed bug that caused animation problems
 
-Fl_Menu_Item* ModelerUserInterface::m_controlsAnimOnMenu = ModelerUserInterface::menu_m_controlsMenuBar + 19;
+
+Fl_Menu_Item* ModelerUserInterface::m_controlsAnimOnMenu = ModelerUserInterface::menu_m_controlsMenuBar + 20;
+
+//Fl_Menu_Item* ModelerUserInterface::m_controlsAnimOnMenu = ModelerUserInterface::menu_m_controlsMenuBar + 19;
+
 
 inline void ModelerUserInterface::cb_m_controlsBrowser_i(Fl_Browser*, void*) {
   for (int i=0; i<ModelerApplication::Instance()->m_numControls; i++) {
@@ -412,7 +416,11 @@ m_PMWindow = new Fl_Window(600, 525, "Procedural modeling: Tree generate");
 	  m_TrunkSlider->minimum(1);
 	  m_TrunkSlider->maximum(40);
 	  m_TrunkSlider->step(1);
+
 	  TrunkLength = 8;
+
+	  TrunkLength = 10;
+
 	  m_TrunkSlider->value(TrunkLength);
 	  m_TrunkSlider->align(FL_ALIGN_RIGHT);
 
@@ -424,7 +432,11 @@ m_PMWindow = new Fl_Window(600, 525, "Procedural modeling: Tree generate");
 	  m_branchMaxSlider->minimum(0.1);
 	  m_branchMaxSlider->maximum(2.0);
 	  m_branchMaxSlider->step(0.1);
+
 	  m_nBranchMax = 1.0;
+
+	  m_nBranchMax = 1.2;
+
 	  m_branchMaxSlider->value(m_nBranchMax);
 	  m_branchMaxSlider->align(FL_ALIGN_RIGHT);
 
@@ -436,7 +448,11 @@ m_PMWindow = new Fl_Window(600, 525, "Procedural modeling: Tree generate");
 	  m_branchMinSlider->minimum(0.1);
 	  m_branchMinSlider->maximum(2.0);
 	  m_branchMinSlider->step(0.1);
+
 	  m_nBranchMin =0.6;
+
+	  m_nBranchMin =0.8;
+
 	  m_branchMinSlider->value(m_nBranchMin);
 	  m_branchMinSlider->align(FL_ALIGN_RIGHT);
 
