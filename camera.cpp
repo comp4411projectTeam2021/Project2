@@ -195,7 +195,7 @@ void Camera::applyViewingTransform() {
 
 	double* temp = SizeRecorder::getInstance()->minCoord;
 
-	printf("%f, %f, %f \n", temp[0], temp[1], temp[2]);
+	//printf("%f, %f, %f \n", temp[0], temp[1], temp[2]);
 
 	lookAt(mPosition, mLookAt, mUpVector);
 	/*printf("UP: %f %f %f \n", mUpVector[0], mUpVector[1], mUpVector[2]);

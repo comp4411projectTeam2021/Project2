@@ -15,4 +15,4 @@ Probably also satisfy "[B] using the 'triangle' primitive to render them." ?
 
 *Moddel should contains polygon with with 3/4 edges*
 
-Total: 4 + 1 + 3
+Total: 8

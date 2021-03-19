@@ -476,7 +476,34 @@ void drawTriangle( double x1, double y1, double z1,
 }
 
 
+void drawleaves(double x, double y, double z, GLuint* leavesTexture)
+{
 
+    /* remember which matrix mode OpenGL was in. */
+    int savemode;
+    glGetIntegerv(GL_MATRIX_MODE, &savemode);
+
+    /* switch to the model matrix and scale by x,y,z. */
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glScaled(x, y, z);
+
+    glBindTexture(GL_TEXTURE_2D, *leavesTexture);
+
+    glBegin(GL_QUADS);
+
+    glNormal3d(0.0, 1.0, 0.0);
+    glTexCoord2f(0.0, 0.0); glVertex3d(0.0, 0.0, 0.0); glTexCoord2f(0.0, 1.0); glVertex3d(0.0, 0.0, 1.0);
+    glTexCoord2f(1.0, 1.0); glVertex3d(1.0, 0.0, 1.0); glTexCoord2f(1.0, 0.0); glVertex3d(1.0, 0.0, 0.0);
+
+    glEnd();
+
+    /* restore the model matrix stack, and switch back to the matrix
+    mode we were in. */
+    glPopMatrix();
+    glMatrixMode(savemode);
+
+}
 
 
 

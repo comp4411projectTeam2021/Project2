@@ -15,6 +15,7 @@
 #include <FL/gl.h>
 #include <vector>
 #include <iostream>
+#include "Node.h"
 
 int aniCount = 0;
 const int aniMax = 100;
@@ -33,19 +34,22 @@ class MyModel : public ModelerView
 public:
 	MyModel(int x, int y, int w, int h, char* label)
 		: ModelerView(x, y, w, h, label) { 
-		
+		root = Node::generateTree(5);
+		root->setTexture(&texture);
 	}
 
 	virtual void draw();
 	//Shader* testShader = NULL;
 	bool init = false;
 	std::vector<GLuint*> texture;
+	Node* root = nullptr;
 };
 
 // We need to make a creator function, mostly because of
 // nasty API stuff that we'd rather stay away from.
 ModelerView* createMyModel(int x, int y, int w, int h, char* label)
 {
+	
 	return new MyModel(x, y, w, h, label);
 }
 
@@ -59,6 +63,8 @@ void MyModel::draw()
 		//testShader = new Shader("shader.vs", "shader.fs");
 		glEnable(GL_TEXTURE_2D);
 
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		
 		// 为当前绑定的纹理对象设置环绕、过滤方式
@@ -73,6 +79,7 @@ void MyModel::draw()
 		int width, height, nrChannels;
 		unsigned char* data = stbi_load("texture1.jpg", &width, &height, &nrChannels, 0);
 		unsigned char* data2;
+		unsigned char* data3;
 		if (data)
 		{
 			texture.push_back( new GLuint);
@@ -89,6 +96,13 @@ void MyModel::draw()
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data2);
 			glGenerateMipmap(GL_TEXTURE_2D);
 
+			texture.push_back(new GLuint);
+			data3 = stbi_load("leaves.png", &width, &height, &nrChannels, 0);
+			glGenTextures(1, texture[2]);
+			glBindTexture(GL_TEXTURE_2D, *texture[2]);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data3);
+			glGenerateMipmap(GL_TEXTURE_2D);
+
 
 		}
 		else
@@ -97,6 +111,7 @@ void MyModel::draw()
 		}
 			stbi_image_free(data);
 			stbi_image_free(data2);
+			stbi_image_free(data3);
 
 	}
 
@@ -106,8 +121,9 @@ void MyModel::draw()
 	// projection matrix, don't bother with this ...
 	ModelerView::draw();
 	
-
-	if (FBXManager::getFbxManager()->loaded) {
+	if (root != nullptr) {
+		Node::drawTree(root);
+	}else if (FBXManager::getFbxManager()->loaded) {
 		FBXManager* fbxManager = FBXManager::getFbxManager();
 		fbxManager->drawSceneGL();
 	}
@@ -554,6 +570,9 @@ int main()
 	controls[LIGHT_Y] = ModelerControl("light Y", -100, 100, 1, 0);
 	controls[LIGHT_Z] = ModelerControl("light Z", -100, 100, 1, 0);
 	controls[CAM_ANG] = ModelerControl("Camera angle", -180, 180, 1, 0);
+
+	
+
 	ModelerApplication::Instance()->Init(&createMyModel, controls, NUMCONTROLS);
 	return ModelerApplication::Instance()->Run();
 }

@@ -181,6 +181,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="MyModel.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="sizeRecorder.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +194,7 @@
     <ClInclude Include="modelerglobals.h" />
     <ClInclude Include="modelerui.h" />
     <ClInclude Include="modelerview.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="sizeRecorder.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="vec.h" />
