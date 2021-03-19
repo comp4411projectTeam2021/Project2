@@ -47,6 +47,38 @@ ModelerView* createMyModel(int x, int y, int w, int h, char* label)
 
 // We are going to override (is that the right word?) the draw()
 // method of ModelerView to draw out MyModel
+void drawTorus(double radius=3, double radius_d=1, double face=8, double section=16)
+{
+	double preTheta = 0, preCos = 1.0, preSin = 0.0;
+	double faceTheta, length;
+
+	setAmbientColor(.1f, .1f, .1f);
+	setDiffuseColor(1, 1, 1);
+
+	for (int i = 0; i < section; i++)
+	{
+		double nowTheta = preTheta + 2.0 * M_PI / section;
+		glBegin(GL_QUAD_STRIP);
+		faceTheta = 0;
+		for (int j = 0; j <= face; j++)
+		{
+			faceTheta += 2.0 * M_PI / face;
+			length = radius + radius_d * cos(faceTheta);
+
+			glNormal3d(preCos * cos(faceTheta), preSin * cos(faceTheta), sin(faceTheta));
+			glVertex3d(preCos * length, preSin * length, radius_d * sin(faceTheta));
+
+			glNormal3d(cos(nowTheta) * cos(faceTheta), sin(nowTheta) * cos(faceTheta), sin(faceTheta));
+			glVertex3d(cos(nowTheta) * length, sin(nowTheta) * length, radius_d * sin(faceTheta));
+		}
+		glEnd();
+		preTheta = nowTheta;
+		preCos = cos(nowTheta);
+		preSin = sin(nowTheta);
+	}
+}
+
+
 void MyModel::draw()
 {
 	// init texture here
@@ -122,6 +154,8 @@ void MyModel::draw()
 
 	else if (VAL(TORUS) == 1)
 	{
+		drawTorus(VAL(RADIUS), VAL(RADIUS_D), VAL(FACES), VAL(SECTIONS));
+		/*
 		double preTheta = 0, preCos = 1.0, preSin = 0.0;
 		double faceTheta, length;
 
@@ -148,7 +182,7 @@ void MyModel::draw()
 			preTheta = nowTheta;
 			preCos = cos(nowTheta);
 			preSin = sin(nowTheta);
-		}
+		}*/
 	}
 
 
