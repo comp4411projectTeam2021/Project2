@@ -1,6 +1,6 @@
 #include "Node.h"
 #include <ctime>
-
+#define VAL(x) (uiObj->x->value())
 static vector<Node*> nodeList;
 static int maxDepth = 10;
 static ModelerUserInterface* uiObj;
@@ -29,7 +29,7 @@ Node* Node::generateTree(int Depth)
         nodeList.clear();
     }
 
-    maxDepth = Depth;
+    maxDepth = uiObj->m_depthSlider->value();
     generator.seed(std::time(NULL));
     Node* root = new Node(nullptr);
     return root;
@@ -52,12 +52,14 @@ void Node::drawTree(Node* root)
     setDiffuseColor(155 / 255.0, 115 / 255.0, 58 / 255.0);
     glBindTexture(GL_TEXTURE_2D, *(*textures)[0]);
     drawBox(root->scale[0], root->scale[1], root->scale[2]);
-    for (Node* child : root->childrens) {
-        drawTree(child);
-    }
-    if (root->childrens.size() == 0) {
-        glRotated(root->leavesRot, 0, 1, 0);
 
+    if(root->scale[1]>=0.05)//stop if already too short
+        for (Node* child : root->childrens) {
+            drawTree(child);
+        }
+
+    if (VAL(m_LeavesCheckbox) && (root->childrens.size() == 0 || root->scale[1] < 0.05)) {
+        glRotated(root->leavesRot, 0, 1, 0);
         glTranslated(-root->scale[0]*1.8, root->scale[1] + 0.01,- root->scale[2]*1.5);
         drawleaves(1, 1, 1,(*textures)[2]);
     }
@@ -79,15 +81,63 @@ Node::Node(Node* parent = nullptr) {
     else
     {
         depth = parent->depth+1;
-
         this->scale = Vec3f(0.8 * parent->scale);
-        this->scale[1] = 0.6 * parent->scale[1]* distribution(generator);
+
+        std::uniform_real<float> sizeDistribution(VAL(m_branchMinSlider), VAL(m_branchMaxSlider));
+        this->scale[1] = sizeDistribution(generator) * parent->scale[1];
+
         int num = parent->childrens.size();
-        this->rotate = dir[num]* distribution(generator);
+        float x, z;
+        if (VAL(m_RandomXrotateCheckbox)) {
+            std::uniform_real<float> xDistribution(-VAL(m_XRotateSlider), VAL(m_XRotateSlider));
+            x = xDistribution(generator);
+        }
+        else
+        {
+            switch (num+1)
+            {
+            case 1:
+                x = 1 * VAL(m_XRotateSlider);
+                break;
+            case 4:
+                x = -1 * VAL(m_XRotateSlider);
+                break;
+            default:
+                x = 0 * VAL(m_XRotateSlider);
+                break;
+            }
+            
+        }
+
+        if (VAL(m_RandomZrotateCheckbox)) {
+            std::uniform_real<float> zDistribution(-VAL(m_ZRotateSlider), VAL(m_ZRotateSlider));
+            z = zDistribution(generator);
+        }
+        else {
+            switch (num+1)
+            {
+            case 2:
+                z = 1 * VAL(m_ZRotateSlider);
+                break;
+            case 3:
+                z = -1 * VAL(m_ZRotateSlider);
+                break;
+            default:
+                z = 0 * VAL(m_ZRotateSlider);
+                break;
+            }
+        }
+        this->rotate = Vec3f(x, 0, z);
+
     }
 
     if (depth <= maxDepth) {
         for (int i = 0; i < uiObj->m_nSubTreeMax; i++) {
+            if (VAL(m_RandomCheckbox) && i > VAL(m_SubTreeMinSlider)) {
+                if (distribution(generator) > 1.0) {
+                    continue;
+                }
+            }
             Node* tempChild = new Node(this);
             nodeList.push_back(tempChild);
             this->childrens.push_back(tempChild);
