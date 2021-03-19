@@ -50,6 +50,7 @@ public:
     // Get and set slider values.
     double GetControlValue(int controlNumber);
     void   SetControlValue(int controlNumber, double value);
+	ModelerUserInterface *m_ui;
 
 private:
 	// Private for singleton
@@ -66,7 +67,6 @@ private:
     void    ShowControl(int controlNumber);
     void    HideControl(int controlNumber);
 
-	ModelerUserInterface *m_ui;
 	int					  m_numControls;
 
     Fl_Box               **m_controlLabelBoxes;

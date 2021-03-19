@@ -194,6 +194,7 @@
     <ClInclude Include="modelerglobals.h" />
     <ClInclude Include="modelerui.h" />
     <ClInclude Include="modelerview.h" />
+    <ClInclude Include="MyModel.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="sizeRecorder.h" />
     <ClInclude Include="stb_image.h" />

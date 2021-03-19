@@ -15,6 +15,7 @@
 #include <iostream.h>
 
 #endif // _MSC_VER >= 1300
+#include "MyModel.h"
 
 #include <string>
 #include <fstream>
@@ -252,6 +253,10 @@ void ModelerUserInterface::cb_Focus(Fl_Menu_* o, void* v) {
 	((ModelerUserInterface*)(o->parent()->user_data()))->cb_Focus_i(o,v);
 }
 
+void ModelerUserInterface::cb_PMopen(Fl_Menu_* o, void* v) {
+	((ModelerUserInterface*)(o->parent()->user_data()))->m_PMWindow->show();
+}
+
 inline void ModelerUserInterface::cb_m_controlsAnimOnMenu_i(Fl_Menu_*, void*) {
   ModelerApplication::Instance()->m_animating = (m_controlsAnimOnMenu->value() == 0) ? false : true;
 }
@@ -277,6 +282,7 @@ Fl_Menu_Item ModelerUserInterface::menu_m_controlsMenuBar[] = {
  {"Low Quality", 0,  (Fl_Callback*)ModelerUserInterface::cb_Low, 0, 8, 0, 0, 14, 0},
  {"Poor Quality", 0,  (Fl_Callback*)ModelerUserInterface::cb_Poor, 0, 136, 0, 0, 14, 0},
  {"Focus on Origin", 0,  (Fl_Callback*)ModelerUserInterface::cb_Focus, 0, 0, 0, 0, 14, 0},
+ {"Procedural modeling", 0,  (Fl_Callback*)ModelerUserInterface::cb_PMopen, 0, 0, 0, 0, 14, 0},
  {0},
  {"Animate", 0,  0, 0, 64, 0, 0, 14, 0},
  {"Enable", 0,  (Fl_Callback*)ModelerUserInterface::cb_m_controlsAnimOnMenu, 0, 2, 0, 0, 14, 0},
@@ -297,6 +303,11 @@ inline void ModelerUserInterface::cb_m_controlsBrowser_i(Fl_Browser*, void*) {
 }
 void ModelerUserInterface::cb_m_controlsBrowser(Fl_Browser* o, void* v) {
   ((ModelerUserInterface*)(o->parent()->user_data()))->cb_m_controlsBrowser_i(o,v);
+}
+
+void ModelerUserInterface::cb_PMApply(Fl_Widget* o, void* v)
+{
+	((MyModel*)(((ModelerUserInterface*)(o->user_data()))->m_modelerView))->generateTree();
 }
 
 inline void ModelerUserInterface::cb_m_modelerWindow_i(Fl_Window*, void*) {
@@ -339,6 +350,126 @@ ModelerUserInterface::ModelerUserInterface() {
       Fl_Group::current()->resizable(o);
     }
     o->end();
+  }
+
+  {
+m_PMWindow = new Fl_Window(600, 525, "Procedural modeling: Tree generate");
+
+	  m_ApplyPMButton = new Fl_Button(425, 475, 150, 25, "&Apply");
+	  m_ApplyPMButton->user_data((void*)(this));
+	  m_ApplyPMButton->callback(cb_PMApply);
+
+	  new Fl_Box(10, 20, 400, 20, "General settings");
+	  
+	  m_RandomCheckbox = new Fl_Check_Button(10, 50, 50, 20, "Random Tree");
+	  m_LeavesCheckbox = new Fl_Check_Button(150, 50, 50, 20, "Leaves");
+
+	  m_depthSlider = new Fl_Value_Slider(10, 80, 300, 20, "Tree Size ");
+	  m_depthSlider->user_data((void*)(this));	// record self to be used by static callback functions
+	  m_depthSlider->type(FL_HOR_NICE_SLIDER);
+	  m_depthSlider->labelfont(FL_COURIER);
+	  m_depthSlider->labelsize(12);
+	  m_depthSlider->minimum(1);
+	  m_depthSlider->maximum(40);
+	  m_depthSlider->step(1);
+	  m_nSize = 5;
+	  m_depthSlider->value(m_nSize);
+	  m_depthSlider->align(FL_ALIGN_RIGHT);
+
+	  new Fl_Box(10, 110, 400, 20, "(WARNING: may result in lag or Stack over flow if too hight)");
+
+	  new Fl_Box(10, 140, 400, 20, "Detailed Settings");
+
+	  m_SubTreeMaxSlider = new Fl_Value_Slider(10, 170, 300, 20, "Maximun Num of branch ");
+	  m_SubTreeMaxSlider->user_data((void*)(this));	// record self to be used by static callback functions
+	  m_SubTreeMaxSlider->type(FL_HOR_NICE_SLIDER);
+	  m_SubTreeMaxSlider->labelfont(FL_COURIER);
+	  m_SubTreeMaxSlider->labelsize(12);
+	  m_SubTreeMaxSlider->minimum(1);
+	  m_SubTreeMaxSlider->maximum(4);
+	  m_SubTreeMaxSlider->step(1);
+	  m_nSubTreeMax = 4;
+	  m_SubTreeMaxSlider->value(m_nSubTreeMax);
+	  m_SubTreeMaxSlider->align(FL_ALIGN_RIGHT);
+
+	  m_SubTreeMinSlider = new Fl_Value_Slider(10, 200, 300, 20, "Minimal Num of branch ");
+	  m_SubTreeMinSlider->user_data((void*)(this));	// record self to be used by static callback functions
+	  m_SubTreeMinSlider->type(FL_HOR_NICE_SLIDER);
+	  m_SubTreeMinSlider->labelfont(FL_COURIER);
+	  m_SubTreeMinSlider->labelsize(12);
+	  m_SubTreeMinSlider->minimum(0);
+	  m_SubTreeMinSlider->maximum(4);
+	  m_SubTreeMinSlider->step(1);
+	  m_nSubTreeMIn = 4;
+	  m_SubTreeMinSlider->value(m_nSubTreeMIn);
+	  m_SubTreeMinSlider->align(FL_ALIGN_RIGHT);
+
+	  m_TrunkSlider = new Fl_Value_Slider(10, 230, 300, 20, "Trunk length");
+	  m_TrunkSlider->user_data((void*)(this));	// record self to be used by static callback functions
+	  m_TrunkSlider->type(FL_HOR_NICE_SLIDER);
+	  m_TrunkSlider->labelfont(FL_COURIER);
+	  m_TrunkSlider->labelsize(12);
+	  m_TrunkSlider->minimum(1);
+	  m_TrunkSlider->maximum(40);
+	  m_TrunkSlider->step(1);
+	  TrunkLength = 10;
+	  m_TrunkSlider->value(TrunkLength);
+	  m_TrunkSlider->align(FL_ALIGN_RIGHT);
+
+	  m_branchMaxSlider = new Fl_Value_Slider(10, 260, 300, 20, "Branch length max ratio(to parent)");
+	  m_branchMaxSlider->user_data((void*)(this));	// record self to be used by static callback functions
+	  m_branchMaxSlider->type(FL_HOR_NICE_SLIDER);
+	  m_branchMaxSlider->labelfont(FL_COURIER);
+	  m_branchMaxSlider->labelsize(12);
+	  m_branchMaxSlider->minimum(0.1);
+	  m_branchMaxSlider->maximum(2.0);
+	  m_branchMaxSlider->step(0.1);
+	  m_nBranchMax = 1.2;
+	  m_branchMaxSlider->value(m_nBranchMax);
+	  m_branchMaxSlider->align(FL_ALIGN_RIGHT);
+
+	  m_branchMinSlider = new Fl_Value_Slider(10, 290, 300, 20, "Branch length min ratio(to parent)");
+	  m_branchMinSlider->user_data((void*)(this));	// record self to be used by static callback functions
+	  m_branchMinSlider->type(FL_HOR_NICE_SLIDER);
+	  m_branchMinSlider->labelfont(FL_COURIER);
+	  m_branchMinSlider->labelsize(12);
+	  m_branchMinSlider->minimum(0.1);
+	  m_branchMinSlider->maximum(2.0);
+	  m_branchMinSlider->step(0.1);
+	  m_nBranchMin =0.8;
+	  m_branchMinSlider->value(m_nBranchMin);
+	  m_branchMinSlider->align(FL_ALIGN_RIGHT);
+
+	  m_RandomXrotateCheckbox = new Fl_Check_Button(500, 320, 50, 20, "Random");
+	  m_XRotateSlider = new Fl_Value_Slider(10, 320, 300, 20, "Branch X angle (+ -)");
+	  m_XRotateSlider->user_data((void*)(this));	// record self to be used by static callback functions
+	  m_XRotateSlider->type(FL_HOR_NICE_SLIDER);
+	  m_XRotateSlider->labelfont(FL_COURIER);
+	  m_XRotateSlider->labelsize(12);
+	  m_XRotateSlider->minimum(0);
+	  m_XRotateSlider->maximum(90);
+	  m_XRotateSlider->step(0.5);
+	  m_nXangle = 50;
+	  m_XRotateSlider->value(m_nXangle);
+	  m_XRotateSlider->align(FL_ALIGN_RIGHT);
+
+	  m_RandomZrotateCheckbox = new Fl_Check_Button(500, 350, 50, 20, "Random");
+	  m_ZRotateSlider = new Fl_Value_Slider(10, 350, 300, 20, "Branch Z angle (+ -)");
+	  m_ZRotateSlider->user_data((void*)(this));	// record self to be used by static callback functions
+	  m_ZRotateSlider->type(FL_HOR_NICE_SLIDER);
+	  m_ZRotateSlider->labelfont(FL_COURIER);
+	  m_ZRotateSlider->labelsize(12);
+	  m_ZRotateSlider->minimum(0);
+	  m_ZRotateSlider->maximum(90);
+	  m_ZRotateSlider->step(0.5);
+	  m_nZangle = 50;
+	  m_ZRotateSlider->value(m_nZangle);
+	  m_ZRotateSlider->align(FL_ALIGN_RIGHT);
+
+
+
+
+m_PMWindow->end();
   }
 }
 

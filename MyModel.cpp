@@ -1,21 +1,7 @@
-// The sample model.  You should build a file
-// very similar to this for when you make your model.
-#include <gl/glew.h>
-#include "modelerview.h"
-#include "modelerapp.h"
-#include "modelerdraw.h"
-#include "FBXManager.h"
-#include "modelerui.h"
-
-#include "modelerglobals.h"
-//#include "Shader.h"
-
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include <FL/gl.h>
-#include <vector>
-#include <iostream>
-#include "Node.h"
+
+#include "MyModel.h"
 
 int aniCount = 0;
 const int aniMax = 100;
@@ -28,22 +14,7 @@ double CountD = aniCount;
 double maxD = aniMax;
 int preMood = 0;
 
-// To make a MyModel, we inherit off of ModelerView
-class MyModel : public ModelerView
-{
-public:
-	MyModel(int x, int y, int w, int h, char* label)
-		: ModelerView(x, y, w, h, label) { 
-		root = Node::generateTree(5);
-		root->setTexture(&texture);
-	}
 
-	virtual void draw();
-	//Shader* testShader = NULL;
-	bool init = false;
-	std::vector<GLuint*> texture;
-	Node* root = nullptr;
-};
 
 // We need to make a creator function, mostly because of
 // nasty API stuff that we'd rather stay away from.
@@ -575,4 +546,10 @@ int main()
 
 	ModelerApplication::Instance()->Init(&createMyModel, controls, NUMCONTROLS);
 	return ModelerApplication::Instance()->Run();
+}
+
+void MyModel::generateTree() {
+	Node::setUI(ModelerApplication::Instance()->m_ui);
+	root = Node::generateTree(ModelerApplication::Instance()->m_ui->m_nSize);
+	redraw();
 }

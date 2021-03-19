@@ -1,8 +1,9 @@
 #include "Node.h"
+#include <ctime>
 
 static vector<Node*> nodeList;
 static int maxDepth = 10;
-
+static ModelerUserInterface* uiObj;
 
 std::default_random_engine generator;
 
@@ -15,10 +16,21 @@ void Node::setTexture(std::vector<GLuint*>* tex) {
     textures = tex;
 }
 
+void Node::setUI(ModelerUserInterface* UI)
+{
+    uiObj = UI;
+}
+
 Node* Node::generateTree(int Depth)
 {
+    //Clean up
+    if (nodeList.size() != 0) {
+        delete nodeList.back();
+        nodeList.clear();
+    }
+
     maxDepth = Depth;
-    generator.seed(time(NULL));
+    generator.seed(std::time(NULL));
     Node* root = new Node(nullptr);
     return root;
 }
@@ -62,7 +74,7 @@ Node::Node(Node* parent = nullptr) {
     this->parent = parent;
     if (parent == nullptr) {
         depth = 0;
-        scale = Vec3f(1,8,1);
+        scale = Vec3f(1,uiObj->TrunkLength,1);
     }
     else
     {
@@ -75,7 +87,7 @@ Node::Node(Node* parent = nullptr) {
     }
 
     if (depth <= maxDepth) {
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < uiObj->m_nSubTreeMax; i++) {
             Node* tempChild = new Node(this);
             nodeList.push_back(tempChild);
             this->childrens.push_back(tempChild);
